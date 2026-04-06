@@ -1,0 +1,438 @@
+// =============================================================
+// USER ACTIVITY (Watchlist and Notifications)
+// =============================================================
+
+// =============================================================
+// WATCHLIST
+// =============================================================
+
+model WatchlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  mediaId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, mediaId])
+  @@map("watchlist_item")
+}
+
+// =============================================================
+// NOTIFICATIONS 
+// =============================================================
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  body      String
+  link      String? // deep link in the app
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@map("notification")
+}
+
+// =============================================================
+// AUTHENTICATION
+// Better Auth core tables — required by the library
+// =============================================================
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  role          Role      @default(USER)
+  banned        Boolean   @default(false)
+  banReason     String?
+  banExpires    DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Better Auth relations
+  sessions Session[]
+  accounts Account[]
+
+  // App relations
+  reviews       Review[]
+  reviewLikes   ReviewLike[]
+  comments      Comment[]
+  watchlist     WatchlistItem[]
+  subscriptions Subscription[]
+  purchases     Purchase[]
+  notifications Notification[]
+
+  @@map("user")
+}
+
+model Session {
+  id             String   @id @default(cuid())
+  expiresAt      DateTime
+  token          String   @unique
+  ipAddress      String?
+  userAgent      String?
+  userId         String
+  impersonatedBy String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String? // hashed — used for email/password provider
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@map("verification")
+}
+
+// =============================================================
+// BASE - Configuration and Enums
+// =============================================================
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum MediaType {
+  MOVIE
+  SERIES
+}
+
+enum MediaStatus {
+  PUBLISHED
+  DRAFT
+  ARCHIVED
+}
+
+enum ReviewStatus {
+  PENDING
+  PUBLISHED
+  UNPUBLISHED
+}
+
+enum PricingTier {
+  FREE
+  PREMIUM
+}
+
+enum SubscriptionPlan {
+  MONTHLY
+  YEARLY
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  PAST_DUE
+}
+
+enum PurchaseType {
+  SUBSCRIPTION
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+// =============================================================
+// MEDIA LIBRARY
+// =============================================================
+
+model Genre {
+  id        String   @id @default(cuid())
+  name      String   @unique // e.g. "Action", "Drama", "Sci-Fi"
+  slug      String   @unique
+  createdAt DateTime @default(now())
+
+  mediaGenres MediaGenre[]
+
+  @@map("genre")
+}
+
+model StreamingPlatform {
+  id        String   @id @default(cuid())
+  name      String   @unique // e.g. "Netflix", "Disney+", "Amazon Prime"
+  slug      String   @unique
+  logoUrl   String?
+  createdAt DateTime @default(now())
+
+  mediaLinks MediaStreamingLink[]
+
+  @@map("streaming_platform")
+}
+
+model Media {
+  id           String      @id @default(cuid())
+  title        String
+  slug         String      @unique
+  synopsis     String
+  type         MediaType
+  releaseYear  Int
+  director     String?
+  posterUrl    String?
+  backdropUrl  String?
+  trailerUrl   String? // YouTube embed URL
+  streamingUrl String? // direct streaming/YouTube link
+  pricingTier  PricingTier @default(FREE)
+  status       MediaStatus @default(DRAFT)
+  isFeatured   Boolean     @default(false)
+  isEditorPick Boolean     @default(false)
+
+  // Aggregated rating cache — updated via background job or trigger
+  avgRating    Float?
+  totalRatings Int    @default(0)
+  totalReviews Int    @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  genres         MediaGenre[]
+  cast           CastMember[]
+  streamingLinks MediaStreamingLink[]
+  reviews        Review[]
+  watchlistItems WatchlistItem[]
+
+  @@index([status, pricingTier])
+  @@index([releaseYear])
+  @@index([avgRating])
+  @@map("media")
+}
+
+// Many-to-many: Media <-> Genre
+model MediaGenre {
+  mediaId String
+  genreId String
+
+  media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  genre Genre @relation(fields: [genreId], references: [id], onDelete: Cascade)
+
+  @@id([mediaId, genreId])
+  @@map("media_genre")
+}
+
+// Many-to-many: Media <-> StreamingPlatform (with optional deep link)
+model MediaStreamingLink {
+  id         String  @id @default(cuid())
+  mediaId    String
+  platformId String
+  deepLink   String? // platform-specific URL
+
+  media    Media             @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  platform StreamingPlatform @relation(fields: [platformId], references: [id], onDelete: Cascade)
+
+  @@unique([mediaId, platformId])
+  @@map("media_streaming_link")
+}
+
+model CastMember {
+  id        String  @id @default(cuid())
+  mediaId   String
+  name      String
+  character String?
+  photoUrl  String?
+  order     Int     @default(0) // display order
+
+  media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  @@index([mediaId])
+  @@map("cast_member")
+}
+
+// =============================================================
+// REVIEWS AND COMMENTS
+// =============================================================
+
+model Review {
+  id          String       @id @default(cuid())
+  userId      String
+  mediaId     String
+  rating      Int // 1–10
+  content     String
+  hasSpoiler  Boolean      @default(false)
+  status      ReviewStatus @default(PENDING)
+  publishedAt DateTime?
+  adminNote   String? // reason for unpublishing
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  media    Media        @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  tags     ReviewTag[]
+  likes    ReviewLike[]
+  comments Comment[]
+
+  // One user, one review per title
+  @@unique([userId, mediaId])
+  @@index([mediaId, status])
+  @@index([status])
+  @@map("review")
+}
+
+model Tag {
+  id   String @id @default(cuid())
+  name String @unique // e.g. "classic", "underrated", "family-friendly"
+  slug String @unique
+
+  reviewTags ReviewTag[]
+
+  @@map("tag")
+}
+
+// Many-to-many: Review <-> Tag
+model ReviewTag {
+  reviewId String
+  tagId    String
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([reviewId, tagId])
+  @@map("review_tag")
+}
+
+model ReviewLike {
+  id        String   @id @default(cuid())
+  userId    String
+  reviewId  String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  // One like per user per review
+  @@unique([userId, reviewId])
+  @@map("review_like")
+}
+
+// =============================================================
+// COMMENTS  (nested threads via self-relation)
+// =============================================================
+
+model Comment {
+  id        String   @id @default(cuid())
+  userId    String
+  reviewId  String
+  parentId  String? // null = top-level; set = reply
+  content   String
+  isHidden  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  review  Review    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies Comment[] @relation("CommentReplies")
+
+  @@index([reviewId])
+  @@map("comment")
+}
+
+// =============================================================
+// SUBSCRIPTIONS & PAYMENTS
+// =============================================================
+
+model SubscriptionPlanConfig {
+  id           String           @id @default(cuid())
+  plan         SubscriptionPlan @unique
+  price        Decimal          @db.Decimal(10, 2)
+  currency     String           @default("USD")
+  durationDays Int // 30 for monthly, 365 for yearly
+  description  String?
+  isActive     Boolean          @default(true)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@map("subscription_plan_config")
+}
+
+model Subscription {
+  id                   String             @id @default(cuid())
+  userId               String
+  plan                 SubscriptionPlan
+  status               SubscriptionStatus @default(ACTIVE)
+  startDate            DateTime
+  endDate              DateTime
+  stripeSubscriptionId String?            @unique
+  stripeCustomerId     String?
+  cancelledAt          DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  purchases Purchase[]
+
+  @@index([userId, status])
+  @@map("subscription")
+}
+
+model Purchase {
+  id              String        @id @default(cuid())
+  userId          String
+  subscriptionId  String?
+  type            PurchaseType
+  amount          Decimal       @db.Decimal(10, 2)
+  currency        String        @default("USD")
+  paymentStatus   PaymentStatus @default(PENDING)
+  paymentProvider String? // "stripe" | "sslcommerz"
+  providerTxnId   String?       @unique
+  providerPayload Json? // raw webhook payload for audit
+  refundedAt      DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscription Subscription? @relation(fields: [subscriptionId], references: [id])
+
+  @@index([userId])
+  @@index([paymentStatus])
+  @@map("purchase")
+}

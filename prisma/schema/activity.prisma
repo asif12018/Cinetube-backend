@@ -1,0 +1,39 @@
+// =============================================================
+// USER ACTIVITY (Watchlist and Notifications)
+// =============================================================
+
+// =============================================================
+// WATCHLIST
+// =============================================================
+
+model WatchlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  mediaId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, mediaId])
+  @@map("watchlist_item")
+}
+
+// =============================================================
+// NOTIFICATIONS 
+// =============================================================
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  body      String
+  link      String?  // deep link in the app
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@map("notification")
+}

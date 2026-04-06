@@ -1,0 +1,103 @@
+// =============================================================
+// MEDIA LIBRARY
+// =============================================================
+
+model Genre {
+  id        String   @id @default(cuid())
+  name      String   @unique  // e.g. "Action", "Drama", "Sci-Fi"
+  slug      String   @unique
+  createdAt DateTime @default(now())
+
+  mediaGenres MediaGenre[]
+
+  @@map("genre")
+}
+
+model StreamingPlatform {
+  id        String   @id @default(cuid())
+  name      String   @unique  // e.g. "Netflix", "Disney+", "Amazon Prime"
+  slug      String   @unique
+  logoUrl   String?
+  createdAt DateTime @default(now())
+
+  mediaLinks MediaStreamingLink[]
+
+  @@map("streaming_platform")
+}
+
+model Media {
+  id           String      @id @default(cuid())
+  title        String
+  slug         String      @unique
+  synopsis     String
+  type         MediaType
+  releaseYear  Int
+  director     String?
+  posterUrl    String?
+  backdropUrl  String?
+  trailerUrl   String?     // YouTube embed URL
+  streamingUrl String?     // direct streaming/YouTube link
+  pricingTier  PricingTier @default(FREE)
+  status       MediaStatus @default(DRAFT)
+  isFeatured   Boolean     @default(false)
+  isEditorPick Boolean     @default(false)
+
+  // Aggregated rating cache — updated via background job or trigger
+  avgRating    Float?
+  totalRatings Int         @default(0)
+  totalReviews Int         @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  genres          MediaGenre[]
+  cast            CastMember[]
+  streamingLinks  MediaStreamingLink[]
+  reviews         Review[]
+  watchlistItems  WatchlistItem[]
+
+  @@index([status, pricingTier])
+  @@index([releaseYear])
+  @@index([avgRating])
+  @@map("media")
+}
+
+// Many-to-many: Media <-> Genre
+model MediaGenre {
+  mediaId String
+  genreId String
+
+  media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  genre Genre @relation(fields: [genreId], references: [id], onDelete: Cascade)
+
+  @@id([mediaId, genreId])
+  @@map("media_genre")
+}
+
+// Many-to-many: Media <-> StreamingPlatform (with optional deep link)
+model MediaStreamingLink {
+  id         String  @id @default(cuid())
+  mediaId    String
+  platformId String
+  deepLink   String? // platform-specific URL
+
+  media    Media             @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  platform StreamingPlatform @relation(fields: [platformId], references: [id], onDelete: Cascade)
+
+  @@unique([mediaId, platformId])
+  @@map("media_streaming_link")
+}
+
+model CastMember {
+  id        String  @id @default(cuid())
+  mediaId   String
+  name      String
+  character String?
+  photoUrl  String?
+  order     Int     @default(0) // display order
+
+  media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  @@index([mediaId])
+  @@map("cast_member")
+}

@@ -1,0 +1,89 @@
+// =============================================================
+// REVIEWS AND COMMENTS
+// =============================================================
+
+model Review {
+  id              String       @id @default(cuid())
+  userId          String
+  mediaId         String
+  rating          Int          // 1–10
+  content         String
+  hasSpoiler      Boolean      @default(false)
+  status          ReviewStatus @default(PENDING)
+  publishedAt     DateTime?
+  adminNote       String?      // reason for unpublishing
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  media    Media         @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  tags     ReviewTag[]
+  likes    ReviewLike[]
+  comments Comment[]
+
+  // One user, one review per title
+  @@unique([userId, mediaId])
+  @@index([mediaId, status])
+  @@index([status])
+  @@map("review")
+}
+
+model Tag {
+  id   String @id @default(cuid())
+  name String @unique // e.g. "classic", "underrated", "family-friendly"
+  slug String @unique
+
+  reviewTags ReviewTag[]
+
+  @@map("tag")
+}
+
+// Many-to-many: Review <-> Tag
+model ReviewTag {
+  reviewId String
+  tagId    String
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([reviewId, tagId])
+  @@map("review_tag")
+}
+
+model ReviewLike {
+  id        String   @id @default(cuid())
+  userId    String
+  reviewId  String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  // One like per user per review
+  @@unique([userId, reviewId])
+  @@map("review_like")
+}
+
+// =============================================================
+// COMMENTS  (nested threads via self-relation)
+// =============================================================
+
+model Comment {
+  id        String   @id @default(cuid())
+  userId    String
+  reviewId  String
+  parentId  String?  // null = top-level; set = reply
+  content   String
+  isHidden  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  review   Review    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies  Comment[] @relation("CommentReplies")
+
+  @@index([reviewId])
+  @@map("comment")
+}
