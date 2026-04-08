@@ -3,6 +3,7 @@ import { catchAsync } from "../../shared/catchAsync";
 import { ActorService } from "./actor.service";
 import { sendResponse } from "../../shared/sendResponse";
 import status from "http-status";
+import { IQueryParams } from "../../../interface/query.interface";
 
 
 
@@ -52,7 +53,7 @@ const deleteActor = catchAsync(async(req:Request, res:Response)=>{
 
 
 const getAllActor = catchAsync(async(req:Request, res:Response)=>{
-    const result = await ActorService.getAllActor();
+    const result = await ActorService.getAllActor(req.query as IQueryParams);
     sendResponse(res,{
         httpStatusCode:status.OK,
         success:true,

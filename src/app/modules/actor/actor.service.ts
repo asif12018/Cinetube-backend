@@ -1,6 +1,10 @@
+import { Actor ,Prisma} from "../../../../generated/prisma";
 import { prisma } from "../../lib/prisma";
 import { deleteFileFromCloudinary } from "../../utils/cloudinary.config";
+import { QueryBuilder } from "../../utils/QueryBuilder";
+import { ActorFilterAbleFileds, ActorSearchAbleFields } from "./actor.constant";
 import { ICreateActor, IUpdateActor } from "./actor.interface";
+import { IQueryParams } from "../../../interface/query.interface";
 
 
 
@@ -38,7 +42,7 @@ const updateActor = async(id:string,payload:IUpdateActor)=>{
     return result
 }
 
-///minor
+
 
 
 const deleteActor = async(id:string)=>{
@@ -55,8 +59,15 @@ const deleteActor = async(id:string)=>{
 }
 
 
-const getAllActor = async()=>{
-    const result = await prisma.actor.findMany()
+const getAllActor = async(query: IQueryParams)=>{
+
+    const queryBuilder = new QueryBuilder<Actor, Prisma.ActorWhereInput, Prisma.ActorInclude>(prisma.actor, query,{
+        searchableFields: ActorSearchAbleFields,
+        filterableFields: ActorFilterAbleFileds
+    });
+    
+    const result = await queryBuilder.search().filter().paginate().sort().fields().execute();
+
     return result
 }
 

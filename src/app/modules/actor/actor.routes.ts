@@ -23,8 +23,8 @@ router.patch("/update-actor/:id",checkAuth(Role.ADMIN, Role.SUPER_ADMIN),multerU
 
 router.delete("/delete-actor/:id",checkAuth(Role.ADMIN, Role.SUPER_ADMIN),ActorController.deleteActor);
 
-router.get("/get-all-actor",ActorController.getAllActor);
+router.get("/",ActorController.getAllActor);
 
-router.get("/get-actor-by-id/:id",ActorController.getActorById);
+router.get("/:id",ActorController.getActorById);
 
 export const ActorRoutes = router;
