@@ -34,6 +34,8 @@ const updateActor = async(id:string,payload:IUpdateActor)=>{
     return result
 }
 
+///minor
+
 
 const deleteActor = async(id:string)=>{
     const result = await prisma.actor.delete({
