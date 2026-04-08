@@ -9,7 +9,10 @@ import status from "http-status";
 
 
 const createActor = catchAsync(async(req:Request, res:Response)=>{
-    const payload = req.body;
+    let payload = req.body;
+    if(req.file){
+        payload.photoUrl = req.file.path;
+    }
     const result = await ActorService.createActor(payload);
     sendResponse(res,{
         httpStatusCode:status.CREATED,
@@ -22,7 +25,10 @@ const createActor = catchAsync(async(req:Request, res:Response)=>{
 
 const updateActor = catchAsync(async(req:Request, res:Response)=>{
     const id = req.params.id;
-    const payload = req.body;
+     let payload = req.body;
+    if(req.file){
+        payload.photoUrl = req.file.path;
+    }
     const result = await ActorService.updateActor(id as string,payload);
     sendResponse(res,{
         httpStatusCode:status.OK,

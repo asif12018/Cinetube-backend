@@ -132,9 +132,11 @@ const updateUser = async (id:string,payload: IUpdateUserPayload, user:IRequestUs
       email: user.email
     }
   })
+
+  console.log("all photos url", isDoctorExist.image, payload.image)
   //deleting photo if its exist
-  if(isDoctorExist.image){
-    deleteFileFromCloudinary(isDoctorExist.image);
+  if(isDoctorExist.image && payload.image){
+    await deleteFileFromCloudinary(isDoctorExist.image);
   }
   const result = await prisma.user.update({
     where:{

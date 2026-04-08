@@ -10,11 +10,11 @@ import AppError from "../../../errorHelpers/AppError";
 //register a user
 const registerUser = catchAsync(async (req: Request, res: Response) => {
   let payload = req.body;
-  console.log("=== REGISTER DEBUG ===");
-  console.log("req.body:", req.body);
-  console.log("req.file:", req.file);
-  console.log("req.files:", req.files);
-  console.log("================");
+  // console.log("=== REGISTER DEBUG ===");
+  // console.log("req.body:", req.body);
+  // console.log("req.file:", req.file);
+  // console.log("req.files:", req.files);
+  // console.log("================");
 
   if (req.body.data) {
     payload = JSON.parse(req.body.data);
@@ -60,7 +60,10 @@ const logInUser = catchAsync(async (req: Request, res: Response) => {
 const updateUser = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
   const payload = req.body;
-  const user = req.user;
+  let user = req.user;
+  if(req.file){
+    payload.image = req.file.path
+  }
   const result = await AuthServices.updateUser(id as string, payload, user);
   sendResponse(res, {
     httpStatusCode: status.OK,

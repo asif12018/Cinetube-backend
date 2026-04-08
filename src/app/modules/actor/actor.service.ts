@@ -1,4 +1,5 @@
 import { prisma } from "../../lib/prisma";
+import { deleteFileFromCloudinary } from "../../utils/cloudinary.config";
 import { ICreateActor, IUpdateActor } from "./actor.interface";
 
 
@@ -25,6 +26,9 @@ const updateActor = async(id:string,payload:IUpdateActor)=>{
     if(!isActorExist){
         throw new Error("Actor not found")
     }
+    if(isActorExist.photoUrl && payload.photoUrl){
+        await deleteFileFromCloudinary(isActorExist.photoUrl);
+    }
     const result = await prisma.actor.update({
         where:{
             id:isActorExist.id
@@ -43,6 +47,10 @@ const deleteActor = async(id:string)=>{
             id
         }
     })
+
+    if(result.photoUrl){
+        await deleteFileFromCloudinary(result.photoUrl)
+    }
     return result
 }
 

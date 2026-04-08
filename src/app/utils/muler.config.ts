@@ -5,8 +5,8 @@ import multer from "multer";
 const storage = new CloudinaryStorage({
   cloudinary: cloudinaryUpload,
   params: async (req, file) => {
-    console.log("CloudinaryStorage params:", cloudinaryUpload.config());
-    console.log("Processing file:", file.originalname);
+    // console.log("CloudinaryStorage params:", cloudinaryUpload.config());
+    // console.log("Processing file:", file.originalname);
     const originalName = file.originalname;
     const fileNameWithOutExtension = originalName
       ?.split(".")

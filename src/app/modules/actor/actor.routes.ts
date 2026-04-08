@@ -17,9 +17,9 @@ const router = Router();
 
 
 
-router.post("/create-actor",checkAuth(Role.ADMIN, Role.SUPER_ADMIN),multerUpload.single("image"), validateRequest(ActorValidation.createActorValidation),ActorController.createActor);
+router.post("/create-actor",checkAuth(Role.ADMIN, Role.SUPER_ADMIN),multerUpload.single("photoUrl"), validateRequest(ActorValidation.createActorValidation),ActorController.createActor);
 
-router.patch("/update-actor/:id",checkAuth(Role.ADMIN, Role.SUPER_ADMIN),multerUpload.single("image"), validateRequest(ActorValidation.updateActorValidation),ActorController.updateActor);
+router.patch("/update-actor/:id",checkAuth(Role.ADMIN, Role.SUPER_ADMIN),multerUpload.single("photoUrl"), validateRequest(ActorValidation.updateActorValidation),ActorController.updateActor);
 
 router.delete("/delete-actor/:id",checkAuth(Role.ADMIN, Role.SUPER_ADMIN),ActorController.deleteActor);
 
