@@ -12282,8 +12282,8 @@ export namespace Prisma {
     isFeatured: boolean
     isEditorPick: boolean
     avgRating: number | null
-    totalRatings: number
-    totalReviews: number
+    totalRatings: number | null
+    totalReviews: number | null
     rentPrice: Decimal | null
     buyPrice: Decimal | null
     createdAt: Date
@@ -12456,8 +12456,8 @@ export namespace Prisma {
       isFeatured: boolean
       isEditorPick: boolean
       avgRating: number | null
-      totalRatings: number
-      totalReviews: number
+      totalRatings: number | null
+      totalReviews: number | null
       rentPrice: Prisma.Decimal | null
       buyPrice: Prisma.Decimal | null
       createdAt: Date
@@ -25645,8 +25645,8 @@ export namespace Prisma {
     isFeatured?: BoolFilter<"Media"> | boolean
     isEditorPick?: BoolFilter<"Media"> | boolean
     avgRating?: FloatNullableFilter<"Media"> | number | null
-    totalRatings?: IntFilter<"Media"> | number
-    totalReviews?: IntFilter<"Media"> | number
+    totalRatings?: IntNullableFilter<"Media"> | number | null
+    totalReviews?: IntNullableFilter<"Media"> | number | null
     rentPrice?: DecimalNullableFilter<"Media"> | Decimal | DecimalJsLike | number | string | null
     buyPrice?: DecimalNullableFilter<"Media"> | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFilter<"Media"> | Date | string
@@ -25676,8 +25676,8 @@ export namespace Prisma {
     isFeatured?: SortOrder
     isEditorPick?: SortOrder
     avgRating?: SortOrderInput | SortOrder
-    totalRatings?: SortOrder
-    totalReviews?: SortOrder
+    totalRatings?: SortOrderInput | SortOrder
+    totalReviews?: SortOrderInput | SortOrder
     rentPrice?: SortOrderInput | SortOrder
     buyPrice?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -25710,8 +25710,8 @@ export namespace Prisma {
     isFeatured?: BoolFilter<"Media"> | boolean
     isEditorPick?: BoolFilter<"Media"> | boolean
     avgRating?: FloatNullableFilter<"Media"> | number | null
-    totalRatings?: IntFilter<"Media"> | number
-    totalReviews?: IntFilter<"Media"> | number
+    totalRatings?: IntNullableFilter<"Media"> | number | null
+    totalReviews?: IntNullableFilter<"Media"> | number | null
     rentPrice?: DecimalNullableFilter<"Media"> | Decimal | DecimalJsLike | number | string | null
     buyPrice?: DecimalNullableFilter<"Media"> | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFilter<"Media"> | Date | string
@@ -25741,8 +25741,8 @@ export namespace Prisma {
     isFeatured?: SortOrder
     isEditorPick?: SortOrder
     avgRating?: SortOrderInput | SortOrder
-    totalRatings?: SortOrder
-    totalReviews?: SortOrder
+    totalRatings?: SortOrderInput | SortOrder
+    totalReviews?: SortOrderInput | SortOrder
     rentPrice?: SortOrderInput | SortOrder
     buyPrice?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -25774,8 +25774,8 @@ export namespace Prisma {
     isFeatured?: BoolWithAggregatesFilter<"Media"> | boolean
     isEditorPick?: BoolWithAggregatesFilter<"Media"> | boolean
     avgRating?: FloatNullableWithAggregatesFilter<"Media"> | number | null
-    totalRatings?: IntWithAggregatesFilter<"Media"> | number
-    totalReviews?: IntWithAggregatesFilter<"Media"> | number
+    totalRatings?: IntNullableWithAggregatesFilter<"Media"> | number | null
+    totalReviews?: IntNullableWithAggregatesFilter<"Media"> | number | null
     rentPrice?: DecimalNullableWithAggregatesFilter<"Media"> | Decimal | DecimalJsLike | number | string | null
     buyPrice?: DecimalNullableWithAggregatesFilter<"Media"> | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Media"> | Date | string
@@ -27077,8 +27077,8 @@ export namespace Prisma {
     isFeatured?: boolean
     isEditorPick?: boolean
     avgRating?: number | null
-    totalRatings?: number
-    totalReviews?: number
+    totalRatings?: number | null
+    totalReviews?: number | null
     rentPrice?: Decimal | DecimalJsLike | number | string | null
     buyPrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
@@ -27108,8 +27108,8 @@ export namespace Prisma {
     isFeatured?: boolean
     isEditorPick?: boolean
     avgRating?: number | null
-    totalRatings?: number
-    totalReviews?: number
+    totalRatings?: number | null
+    totalReviews?: number | null
     rentPrice?: Decimal | DecimalJsLike | number | string | null
     buyPrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
@@ -27139,8 +27139,8 @@ export namespace Prisma {
     isFeatured?: BoolFieldUpdateOperationsInput | boolean
     isEditorPick?: BoolFieldUpdateOperationsInput | boolean
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalRatings?: IntFieldUpdateOperationsInput | number
-    totalReviews?: IntFieldUpdateOperationsInput | number
+    totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
     rentPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     buyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27170,8 +27170,8 @@ export namespace Prisma {
     isFeatured?: BoolFieldUpdateOperationsInput | boolean
     isEditorPick?: BoolFieldUpdateOperationsInput | boolean
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalRatings?: IntFieldUpdateOperationsInput | number
-    totalReviews?: IntFieldUpdateOperationsInput | number
+    totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
     rentPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     buyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27201,8 +27201,8 @@ export namespace Prisma {
     isFeatured?: boolean
     isEditorPick?: boolean
     avgRating?: number | null
-    totalRatings?: number
-    totalReviews?: number
+    totalRatings?: number | null
+    totalReviews?: number | null
     rentPrice?: Decimal | DecimalJsLike | number | string | null
     buyPrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
@@ -27226,8 +27226,8 @@ export namespace Prisma {
     isFeatured?: BoolFieldUpdateOperationsInput | boolean
     isEditorPick?: BoolFieldUpdateOperationsInput | boolean
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalRatings?: IntFieldUpdateOperationsInput | number
-    totalReviews?: IntFieldUpdateOperationsInput | number
+    totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
     rentPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     buyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27251,8 +27251,8 @@ export namespace Prisma {
     isFeatured?: BoolFieldUpdateOperationsInput | boolean
     isEditorPick?: BoolFieldUpdateOperationsInput | boolean
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalRatings?: IntFieldUpdateOperationsInput | number
-    totalReviews?: IntFieldUpdateOperationsInput | number
+    totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
     rentPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     buyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -28468,6 +28468,17 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type DecimalNullableFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
@@ -28642,6 +28653,22 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -29774,6 +29801,14 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type NullableDecimalFieldUpdateOperationsInput = {
     set?: Decimal | DecimalJsLike | number | string | null
     increment?: Decimal | DecimalJsLike | number | string
@@ -30759,6 +30794,22 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
   export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
@@ -30942,8 +30993,8 @@ export namespace Prisma {
     isFeatured?: boolean
     isEditorPick?: boolean
     avgRating?: number | null
-    totalRatings?: number
-    totalReviews?: number
+    totalRatings?: number | null
+    totalReviews?: number | null
     rentPrice?: Decimal | DecimalJsLike | number | string | null
     buyPrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
@@ -30972,8 +31023,8 @@ export namespace Prisma {
     isFeatured?: boolean
     isEditorPick?: boolean
     avgRating?: number | null
-    totalRatings?: number
-    totalReviews?: number
+    totalRatings?: number | null
+    totalReviews?: number | null
     rentPrice?: Decimal | DecimalJsLike | number | string | null
     buyPrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
@@ -31073,8 +31124,8 @@ export namespace Prisma {
     isFeatured?: BoolFieldUpdateOperationsInput | boolean
     isEditorPick?: BoolFieldUpdateOperationsInput | boolean
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalRatings?: IntFieldUpdateOperationsInput | number
-    totalReviews?: IntFieldUpdateOperationsInput | number
+    totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
     rentPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     buyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31103,8 +31154,8 @@ export namespace Prisma {
     isFeatured?: BoolFieldUpdateOperationsInput | boolean
     isEditorPick?: BoolFieldUpdateOperationsInput | boolean
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalRatings?: IntFieldUpdateOperationsInput | number
-    totalReviews?: IntFieldUpdateOperationsInput | number
+    totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
     rentPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     buyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32318,8 +32369,8 @@ export namespace Prisma {
     isFeatured?: boolean
     isEditorPick?: boolean
     avgRating?: number | null
-    totalRatings?: number
-    totalReviews?: number
+    totalRatings?: number | null
+    totalReviews?: number | null
     rentPrice?: Decimal | DecimalJsLike | number | string | null
     buyPrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
@@ -32348,8 +32399,8 @@ export namespace Prisma {
     isFeatured?: boolean
     isEditorPick?: boolean
     avgRating?: number | null
-    totalRatings?: number
-    totalReviews?: number
+    totalRatings?: number | null
+    totalReviews?: number | null
     rentPrice?: Decimal | DecimalJsLike | number | string | null
     buyPrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
@@ -32417,8 +32468,8 @@ export namespace Prisma {
     isFeatured?: BoolFieldUpdateOperationsInput | boolean
     isEditorPick?: BoolFieldUpdateOperationsInput | boolean
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalRatings?: IntFieldUpdateOperationsInput | number
-    totalReviews?: IntFieldUpdateOperationsInput | number
+    totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
     rentPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     buyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32447,8 +32498,8 @@ export namespace Prisma {
     isFeatured?: BoolFieldUpdateOperationsInput | boolean
     isEditorPick?: BoolFieldUpdateOperationsInput | boolean
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalRatings?: IntFieldUpdateOperationsInput | number
-    totalReviews?: IntFieldUpdateOperationsInput | number
+    totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
     rentPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     buyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32506,8 +32557,8 @@ export namespace Prisma {
     isFeatured?: boolean
     isEditorPick?: boolean
     avgRating?: number | null
-    totalRatings?: number
-    totalReviews?: number
+    totalRatings?: number | null
+    totalReviews?: number | null
     rentPrice?: Decimal | DecimalJsLike | number | string | null
     buyPrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
@@ -32536,8 +32587,8 @@ export namespace Prisma {
     isFeatured?: boolean
     isEditorPick?: boolean
     avgRating?: number | null
-    totalRatings?: number
-    totalReviews?: number
+    totalRatings?: number | null
+    totalReviews?: number | null
     rentPrice?: Decimal | DecimalJsLike | number | string | null
     buyPrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
@@ -32603,8 +32654,8 @@ export namespace Prisma {
     isFeatured?: BoolFieldUpdateOperationsInput | boolean
     isEditorPick?: BoolFieldUpdateOperationsInput | boolean
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalRatings?: IntFieldUpdateOperationsInput | number
-    totalReviews?: IntFieldUpdateOperationsInput | number
+    totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
     rentPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     buyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32633,8 +32684,8 @@ export namespace Prisma {
     isFeatured?: BoolFieldUpdateOperationsInput | boolean
     isEditorPick?: BoolFieldUpdateOperationsInput | boolean
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalRatings?: IntFieldUpdateOperationsInput | number
-    totalReviews?: IntFieldUpdateOperationsInput | number
+    totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
     rentPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     buyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32730,8 +32781,8 @@ export namespace Prisma {
     isFeatured?: boolean
     isEditorPick?: boolean
     avgRating?: number | null
-    totalRatings?: number
-    totalReviews?: number
+    totalRatings?: number | null
+    totalReviews?: number | null
     rentPrice?: Decimal | DecimalJsLike | number | string | null
     buyPrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
@@ -32760,8 +32811,8 @@ export namespace Prisma {
     isFeatured?: boolean
     isEditorPick?: boolean
     avgRating?: number | null
-    totalRatings?: number
-    totalReviews?: number
+    totalRatings?: number | null
+    totalReviews?: number | null
     rentPrice?: Decimal | DecimalJsLike | number | string | null
     buyPrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
@@ -32827,8 +32878,8 @@ export namespace Prisma {
     isFeatured?: BoolFieldUpdateOperationsInput | boolean
     isEditorPick?: BoolFieldUpdateOperationsInput | boolean
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalRatings?: IntFieldUpdateOperationsInput | number
-    totalReviews?: IntFieldUpdateOperationsInput | number
+    totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
     rentPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     buyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32857,8 +32908,8 @@ export namespace Prisma {
     isFeatured?: BoolFieldUpdateOperationsInput | boolean
     isEditorPick?: BoolFieldUpdateOperationsInput | boolean
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalRatings?: IntFieldUpdateOperationsInput | number
-    totalReviews?: IntFieldUpdateOperationsInput | number
+    totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
     rentPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     buyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32963,8 +33014,8 @@ export namespace Prisma {
     isFeatured?: boolean
     isEditorPick?: boolean
     avgRating?: number | null
-    totalRatings?: number
-    totalReviews?: number
+    totalRatings?: number | null
+    totalReviews?: number | null
     rentPrice?: Decimal | DecimalJsLike | number | string | null
     buyPrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
@@ -32993,8 +33044,8 @@ export namespace Prisma {
     isFeatured?: boolean
     isEditorPick?: boolean
     avgRating?: number | null
-    totalRatings?: number
-    totalReviews?: number
+    totalRatings?: number | null
+    totalReviews?: number | null
     rentPrice?: Decimal | DecimalJsLike | number | string | null
     buyPrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
@@ -33166,8 +33217,8 @@ export namespace Prisma {
     isFeatured?: BoolFieldUpdateOperationsInput | boolean
     isEditorPick?: BoolFieldUpdateOperationsInput | boolean
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalRatings?: IntFieldUpdateOperationsInput | number
-    totalReviews?: IntFieldUpdateOperationsInput | number
+    totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
     rentPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     buyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33196,8 +33247,8 @@ export namespace Prisma {
     isFeatured?: BoolFieldUpdateOperationsInput | boolean
     isEditorPick?: BoolFieldUpdateOperationsInput | boolean
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalRatings?: IntFieldUpdateOperationsInput | number
-    totalReviews?: IntFieldUpdateOperationsInput | number
+    totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
     rentPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     buyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33961,8 +34012,8 @@ export namespace Prisma {
     isFeatured?: boolean
     isEditorPick?: boolean
     avgRating?: number | null
-    totalRatings?: number
-    totalReviews?: number
+    totalRatings?: number | null
+    totalReviews?: number | null
     rentPrice?: Decimal | DecimalJsLike | number | string | null
     buyPrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
@@ -33991,8 +34042,8 @@ export namespace Prisma {
     isFeatured?: boolean
     isEditorPick?: boolean
     avgRating?: number | null
-    totalRatings?: number
-    totalReviews?: number
+    totalRatings?: number | null
+    totalReviews?: number | null
     rentPrice?: Decimal | DecimalJsLike | number | string | null
     buyPrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
@@ -34092,8 +34143,8 @@ export namespace Prisma {
     isFeatured?: BoolFieldUpdateOperationsInput | boolean
     isEditorPick?: BoolFieldUpdateOperationsInput | boolean
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalRatings?: IntFieldUpdateOperationsInput | number
-    totalReviews?: IntFieldUpdateOperationsInput | number
+    totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
     rentPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     buyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34122,8 +34173,8 @@ export namespace Prisma {
     isFeatured?: BoolFieldUpdateOperationsInput | boolean
     isEditorPick?: BoolFieldUpdateOperationsInput | boolean
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalRatings?: IntFieldUpdateOperationsInput | number
-    totalReviews?: IntFieldUpdateOperationsInput | number
+    totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
     rentPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     buyPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

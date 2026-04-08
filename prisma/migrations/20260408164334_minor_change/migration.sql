@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "media" ALTER COLUMN "pricingTier" SET DEFAULT 'PREMIUM',
+ALTER COLUMN "totalRatings" DROP NOT NULL,
+ALTER COLUMN "totalReviews" DROP NOT NULL;

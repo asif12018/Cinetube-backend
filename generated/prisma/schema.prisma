@@ -231,15 +231,15 @@ model Media {
   backdropUrl  String?
   trailerUrl   String? // YouTube embed URL
   streamingUrl String? // direct streaming/YouTube link
-  pricingTier  PricingTier @default(FREE)
+  pricingTier  PricingTier @default(PREMIUM)
   status       MediaStatus @default(PUBLISHED)
   isFeatured   Boolean     @default(false)
   isEditorPick Boolean     @default(false)
 
   // Aggregated rating cache — updated via background job or trigger
   avgRating    Float?
-  totalRatings Int    @default(0)
-  totalReviews Int    @default(0)
+  totalRatings Int?   @default(0)
+  totalReviews Int?   @default(0)
 
   //renting or buying options
   rentPrice Decimal? @db.Decimal(10, 2)
