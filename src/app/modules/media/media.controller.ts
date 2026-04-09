@@ -3,6 +3,7 @@ import status from "http-status";
 import { catchAsync } from "../../shared/catchAsync";
 import { MediaService } from "./media.services";
 import { sendResponse } from "../../shared/sendResponse";
+import { IQueryParams } from "../../../interface/query.interface";
 
 
 // =============================================================
@@ -61,7 +62,7 @@ const createMedia = catchAsync(async (req: Request, res: Response) => {
 // 2. GET ALL MEDIA
 // =============================================================
 const getAllMedia = catchAsync(async (req: Request, res: Response) => {
-  const result = await MediaService.getAllMedia();
+  const result = await MediaService.getAllMedia(req.query as IQueryParams);
 
   sendResponse(res, {
     httpStatusCode: status.OK,

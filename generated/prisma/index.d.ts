@@ -201,6 +201,20 @@ export const Gender: {
 
 export type Gender = (typeof Gender)[keyof typeof Gender]
 
+
+export const StreamingPlatFormEnum: {
+  NETFLIX: 'NETFLIX',
+  AMAZON_PRIME: 'AMAZON_PRIME',
+  DISNEY_PLUS: 'DISNEY_PLUS',
+  HBO_MAX: 'HBO_MAX',
+  HULU: 'HULU',
+  APPLE_TV: 'APPLE_TV',
+  YOUTUBE: 'YOUTUBE',
+  OTHER: 'OTHER'
+};
+
+export type StreamingPlatFormEnum = (typeof StreamingPlatFormEnum)[keyof typeof StreamingPlatFormEnum]
+
 }
 
 export type Role = $Enums.Role
@@ -242,6 +256,10 @@ export const PaymentStatus: typeof $Enums.PaymentStatus
 export type Gender = $Enums.Gender
 
 export const Gender: typeof $Enums.Gender
+
+export type StreamingPlatFormEnum = $Enums.StreamingPlatFormEnum
+
+export const StreamingPlatFormEnum: typeof $Enums.StreamingPlatFormEnum
 
 /**
  * ##  Prisma Client ʲˢ
@@ -4082,6 +4100,7 @@ export namespace Prisma {
   export type NotificationMinAggregateOutputType = {
     id: string | null
     userId: string | null
+    personId: string | null
     title: string | null
     body: string | null
     link: string | null
@@ -4092,6 +4111,7 @@ export namespace Prisma {
   export type NotificationMaxAggregateOutputType = {
     id: string | null
     userId: string | null
+    personId: string | null
     title: string | null
     body: string | null
     link: string | null
@@ -4102,6 +4122,7 @@ export namespace Prisma {
   export type NotificationCountAggregateOutputType = {
     id: number
     userId: number
+    personId: number
     title: number
     body: number
     link: number
@@ -4114,6 +4135,7 @@ export namespace Prisma {
   export type NotificationMinAggregateInputType = {
     id?: true
     userId?: true
+    personId?: true
     title?: true
     body?: true
     link?: true
@@ -4124,6 +4146,7 @@ export namespace Prisma {
   export type NotificationMaxAggregateInputType = {
     id?: true
     userId?: true
+    personId?: true
     title?: true
     body?: true
     link?: true
@@ -4134,6 +4157,7 @@ export namespace Prisma {
   export type NotificationCountAggregateInputType = {
     id?: true
     userId?: true
+    personId?: true
     title?: true
     body?: true
     link?: true
@@ -4217,6 +4241,7 @@ export namespace Prisma {
   export type NotificationGroupByOutputType = {
     id: string
     userId: string
+    personId: string | null
     title: string
     body: string
     link: string | null
@@ -4244,6 +4269,7 @@ export namespace Prisma {
   export type NotificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    personId?: boolean
     title?: boolean
     body?: boolean
     link?: boolean
@@ -4255,6 +4281,7 @@ export namespace Prisma {
   export type NotificationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    personId?: boolean
     title?: boolean
     body?: boolean
     link?: boolean
@@ -4266,6 +4293,7 @@ export namespace Prisma {
   export type NotificationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    personId?: boolean
     title?: boolean
     body?: boolean
     link?: boolean
@@ -4277,6 +4305,7 @@ export namespace Prisma {
   export type NotificationSelectScalar = {
     id?: boolean
     userId?: boolean
+    personId?: boolean
     title?: boolean
     body?: boolean
     link?: boolean
@@ -4284,7 +4313,7 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "body" | "link" | "isRead" | "createdAt", ExtArgs["result"]["notification"]>
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "personId" | "title" | "body" | "link" | "isRead" | "createdAt", ExtArgs["result"]["notification"]>
   export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -4303,6 +4332,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string
+      personId: string | null
       title: string
       body: string
       link: string | null
@@ -4734,6 +4764,7 @@ export namespace Prisma {
   interface NotificationFieldRefs {
     readonly id: FieldRef<"Notification", 'String'>
     readonly userId: FieldRef<"Notification", 'String'>
+    readonly personId: FieldRef<"Notification", 'String'>
     readonly title: FieldRef<"Notification", 'String'>
     readonly body: FieldRef<"Notification", 'String'>
     readonly link: FieldRef<"Notification", 'String'>
@@ -12024,6 +12055,7 @@ export namespace Prisma {
     status: $Enums.MediaStatus | null
     isFeatured: boolean | null
     isEditorPick: boolean | null
+    streamingPlatFrom: $Enums.StreamingPlatFormEnum | null
     avgRating: number | null
     totalRatings: number | null
     totalReviews: number | null
@@ -12049,6 +12081,7 @@ export namespace Prisma {
     status: $Enums.MediaStatus | null
     isFeatured: boolean | null
     isEditorPick: boolean | null
+    streamingPlatFrom: $Enums.StreamingPlatFormEnum | null
     avgRating: number | null
     totalRatings: number | null
     totalReviews: number | null
@@ -12074,6 +12107,7 @@ export namespace Prisma {
     status: number
     isFeatured: number
     isEditorPick: number
+    streamingPlatFrom: number
     avgRating: number
     totalRatings: number
     totalReviews: number
@@ -12119,6 +12153,7 @@ export namespace Prisma {
     status?: true
     isFeatured?: true
     isEditorPick?: true
+    streamingPlatFrom?: true
     avgRating?: true
     totalRatings?: true
     totalReviews?: true
@@ -12144,6 +12179,7 @@ export namespace Prisma {
     status?: true
     isFeatured?: true
     isEditorPick?: true
+    streamingPlatFrom?: true
     avgRating?: true
     totalRatings?: true
     totalReviews?: true
@@ -12169,6 +12205,7 @@ export namespace Prisma {
     status?: true
     isFeatured?: true
     isEditorPick?: true
+    streamingPlatFrom?: true
     avgRating?: true
     totalRatings?: true
     totalReviews?: true
@@ -12279,8 +12316,9 @@ export namespace Prisma {
     streamingUrl: string | null
     pricingTier: $Enums.PricingTier
     status: $Enums.MediaStatus
-    isFeatured: boolean
-    isEditorPick: boolean
+    isFeatured: boolean | null
+    isEditorPick: boolean | null
+    streamingPlatFrom: $Enums.StreamingPlatFormEnum | null
     avgRating: number | null
     totalRatings: number | null
     totalReviews: number | null
@@ -12325,6 +12363,7 @@ export namespace Prisma {
     status?: boolean
     isFeatured?: boolean
     isEditorPick?: boolean
+    streamingPlatFrom?: boolean
     avgRating?: boolean
     totalRatings?: boolean
     totalReviews?: boolean
@@ -12357,6 +12396,7 @@ export namespace Prisma {
     status?: boolean
     isFeatured?: boolean
     isEditorPick?: boolean
+    streamingPlatFrom?: boolean
     avgRating?: boolean
     totalRatings?: boolean
     totalReviews?: boolean
@@ -12382,6 +12422,7 @@ export namespace Prisma {
     status?: boolean
     isFeatured?: boolean
     isEditorPick?: boolean
+    streamingPlatFrom?: boolean
     avgRating?: boolean
     totalRatings?: boolean
     totalReviews?: boolean
@@ -12407,6 +12448,7 @@ export namespace Prisma {
     status?: boolean
     isFeatured?: boolean
     isEditorPick?: boolean
+    streamingPlatFrom?: boolean
     avgRating?: boolean
     totalRatings?: boolean
     totalReviews?: boolean
@@ -12416,7 +12458,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type MediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "slug" | "synopsis" | "type" | "releaseYear" | "director" | "posterUrl" | "backdropUrl" | "trailerUrl" | "streamingUrl" | "pricingTier" | "status" | "isFeatured" | "isEditorPick" | "avgRating" | "totalRatings" | "totalReviews" | "rentPrice" | "buyPrice" | "createdAt" | "updatedAt", ExtArgs["result"]["media"]>
+  export type MediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "slug" | "synopsis" | "type" | "releaseYear" | "director" | "posterUrl" | "backdropUrl" | "trailerUrl" | "streamingUrl" | "pricingTier" | "status" | "isFeatured" | "isEditorPick" | "streamingPlatFrom" | "avgRating" | "totalRatings" | "totalReviews" | "rentPrice" | "buyPrice" | "createdAt" | "updatedAt", ExtArgs["result"]["media"]>
   export type MediaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     genres?: boolean | Media$genresArgs<ExtArgs>
     cast?: boolean | Media$castArgs<ExtArgs>
@@ -12453,8 +12495,9 @@ export namespace Prisma {
       streamingUrl: string | null
       pricingTier: $Enums.PricingTier
       status: $Enums.MediaStatus
-      isFeatured: boolean
-      isEditorPick: boolean
+      isFeatured: boolean | null
+      isEditorPick: boolean | null
+      streamingPlatFrom: $Enums.StreamingPlatFormEnum | null
       avgRating: number | null
       totalRatings: number | null
       totalReviews: number | null
@@ -12906,6 +12949,7 @@ export namespace Prisma {
     readonly status: FieldRef<"Media", 'MediaStatus'>
     readonly isFeatured: FieldRef<"Media", 'Boolean'>
     readonly isEditorPick: FieldRef<"Media", 'Boolean'>
+    readonly streamingPlatFrom: FieldRef<"Media", 'StreamingPlatFormEnum'>
     readonly avgRating: FieldRef<"Media", 'Float'>
     readonly totalRatings: FieldRef<"Media", 'Int'>
     readonly totalReviews: FieldRef<"Media", 'Int'>
@@ -17945,8 +17989,8 @@ export namespace Prisma {
     mediaId: string
     rating: number
     content: string
-    hasSpoiler: boolean
-    status: $Enums.ReviewStatus
+    hasSpoiler: boolean | null
+    status: $Enums.ReviewStatus | null
     publishedAt: Date | null
     adminNote: string | null
     createdAt: Date
@@ -18071,8 +18115,8 @@ export namespace Prisma {
       mediaId: string
       rating: number
       content: string
-      hasSpoiler: boolean
-      status: $Enums.ReviewStatus
+      hasSpoiler: boolean | null
+      status: $Enums.ReviewStatus | null
       publishedAt: Date | null
       adminNote: string | null
       createdAt: Date
@@ -24558,6 +24602,7 @@ export namespace Prisma {
   export const NotificationScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
+    personId: 'personId',
     title: 'title',
     body: 'body',
     link: 'link',
@@ -24671,6 +24716,7 @@ export namespace Prisma {
     status: 'status',
     isFeatured: 'isFeatured',
     isEditorPick: 'isEditorPick',
+    streamingPlatFrom: 'streamingPlatFrom',
     avgRating: 'avgRating',
     totalRatings: 'totalRatings',
     totalReviews: 'totalReviews',
@@ -24967,6 +25013,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'StreamingPlatFormEnum'
+   */
+  export type EnumStreamingPlatFormEnumFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StreamingPlatFormEnum'>
+    
+
+
+  /**
+   * Reference to a field of type 'StreamingPlatFormEnum[]'
+   */
+  export type ListEnumStreamingPlatFormEnumFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StreamingPlatFormEnum[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -25113,6 +25173,7 @@ export namespace Prisma {
     NOT?: NotificationWhereInput | NotificationWhereInput[]
     id?: StringFilter<"Notification"> | string
     userId?: StringFilter<"Notification"> | string
+    personId?: StringNullableFilter<"Notification"> | string | null
     title?: StringFilter<"Notification"> | string
     body?: StringFilter<"Notification"> | string
     link?: StringNullableFilter<"Notification"> | string | null
@@ -25124,6 +25185,7 @@ export namespace Prisma {
   export type NotificationOrderByWithRelationInput = {
     id?: SortOrder
     userId?: SortOrder
+    personId?: SortOrderInput | SortOrder
     title?: SortOrder
     body?: SortOrder
     link?: SortOrderInput | SortOrder
@@ -25138,6 +25200,7 @@ export namespace Prisma {
     OR?: NotificationWhereInput[]
     NOT?: NotificationWhereInput | NotificationWhereInput[]
     userId?: StringFilter<"Notification"> | string
+    personId?: StringNullableFilter<"Notification"> | string | null
     title?: StringFilter<"Notification"> | string
     body?: StringFilter<"Notification"> | string
     link?: StringNullableFilter<"Notification"> | string | null
@@ -25149,6 +25212,7 @@ export namespace Prisma {
   export type NotificationOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
+    personId?: SortOrderInput | SortOrder
     title?: SortOrder
     body?: SortOrder
     link?: SortOrderInput | SortOrder
@@ -25165,6 +25229,7 @@ export namespace Prisma {
     NOT?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Notification"> | string
     userId?: StringWithAggregatesFilter<"Notification"> | string
+    personId?: StringNullableWithAggregatesFilter<"Notification"> | string | null
     title?: StringWithAggregatesFilter<"Notification"> | string
     body?: StringWithAggregatesFilter<"Notification"> | string
     link?: StringNullableWithAggregatesFilter<"Notification"> | string | null
@@ -25642,8 +25707,9 @@ export namespace Prisma {
     streamingUrl?: StringNullableFilter<"Media"> | string | null
     pricingTier?: EnumPricingTierFilter<"Media"> | $Enums.PricingTier
     status?: EnumMediaStatusFilter<"Media"> | $Enums.MediaStatus
-    isFeatured?: BoolFilter<"Media"> | boolean
-    isEditorPick?: BoolFilter<"Media"> | boolean
+    isFeatured?: BoolNullableFilter<"Media"> | boolean | null
+    isEditorPick?: BoolNullableFilter<"Media"> | boolean | null
+    streamingPlatFrom?: EnumStreamingPlatFormEnumNullableFilter<"Media"> | $Enums.StreamingPlatFormEnum | null
     avgRating?: FloatNullableFilter<"Media"> | number | null
     totalRatings?: IntNullableFilter<"Media"> | number | null
     totalReviews?: IntNullableFilter<"Media"> | number | null
@@ -25673,8 +25739,9 @@ export namespace Prisma {
     streamingUrl?: SortOrderInput | SortOrder
     pricingTier?: SortOrder
     status?: SortOrder
-    isFeatured?: SortOrder
-    isEditorPick?: SortOrder
+    isFeatured?: SortOrderInput | SortOrder
+    isEditorPick?: SortOrderInput | SortOrder
+    streamingPlatFrom?: SortOrderInput | SortOrder
     avgRating?: SortOrderInput | SortOrder
     totalRatings?: SortOrderInput | SortOrder
     totalReviews?: SortOrderInput | SortOrder
@@ -25707,8 +25774,9 @@ export namespace Prisma {
     streamingUrl?: StringNullableFilter<"Media"> | string | null
     pricingTier?: EnumPricingTierFilter<"Media"> | $Enums.PricingTier
     status?: EnumMediaStatusFilter<"Media"> | $Enums.MediaStatus
-    isFeatured?: BoolFilter<"Media"> | boolean
-    isEditorPick?: BoolFilter<"Media"> | boolean
+    isFeatured?: BoolNullableFilter<"Media"> | boolean | null
+    isEditorPick?: BoolNullableFilter<"Media"> | boolean | null
+    streamingPlatFrom?: EnumStreamingPlatFormEnumNullableFilter<"Media"> | $Enums.StreamingPlatFormEnum | null
     avgRating?: FloatNullableFilter<"Media"> | number | null
     totalRatings?: IntNullableFilter<"Media"> | number | null
     totalReviews?: IntNullableFilter<"Media"> | number | null
@@ -25738,8 +25806,9 @@ export namespace Prisma {
     streamingUrl?: SortOrderInput | SortOrder
     pricingTier?: SortOrder
     status?: SortOrder
-    isFeatured?: SortOrder
-    isEditorPick?: SortOrder
+    isFeatured?: SortOrderInput | SortOrder
+    isEditorPick?: SortOrderInput | SortOrder
+    streamingPlatFrom?: SortOrderInput | SortOrder
     avgRating?: SortOrderInput | SortOrder
     totalRatings?: SortOrderInput | SortOrder
     totalReviews?: SortOrderInput | SortOrder
@@ -25771,8 +25840,9 @@ export namespace Prisma {
     streamingUrl?: StringNullableWithAggregatesFilter<"Media"> | string | null
     pricingTier?: EnumPricingTierWithAggregatesFilter<"Media"> | $Enums.PricingTier
     status?: EnumMediaStatusWithAggregatesFilter<"Media"> | $Enums.MediaStatus
-    isFeatured?: BoolWithAggregatesFilter<"Media"> | boolean
-    isEditorPick?: BoolWithAggregatesFilter<"Media"> | boolean
+    isFeatured?: BoolNullableWithAggregatesFilter<"Media"> | boolean | null
+    isEditorPick?: BoolNullableWithAggregatesFilter<"Media"> | boolean | null
+    streamingPlatFrom?: EnumStreamingPlatFormEnumNullableWithAggregatesFilter<"Media"> | $Enums.StreamingPlatFormEnum | null
     avgRating?: FloatNullableWithAggregatesFilter<"Media"> | number | null
     totalRatings?: IntNullableWithAggregatesFilter<"Media"> | number | null
     totalReviews?: IntNullableWithAggregatesFilter<"Media"> | number | null
@@ -26005,8 +26075,8 @@ export namespace Prisma {
     mediaId?: StringFilter<"Review"> | string
     rating?: IntFilter<"Review"> | number
     content?: StringFilter<"Review"> | string
-    hasSpoiler?: BoolFilter<"Review"> | boolean
-    status?: EnumReviewStatusFilter<"Review"> | $Enums.ReviewStatus
+    hasSpoiler?: BoolNullableFilter<"Review"> | boolean | null
+    status?: EnumReviewStatusNullableFilter<"Review"> | $Enums.ReviewStatus | null
     publishedAt?: DateTimeNullableFilter<"Review"> | Date | string | null
     adminNote?: StringNullableFilter<"Review"> | string | null
     createdAt?: DateTimeFilter<"Review"> | Date | string
@@ -26024,8 +26094,8 @@ export namespace Prisma {
     mediaId?: SortOrder
     rating?: SortOrder
     content?: SortOrder
-    hasSpoiler?: SortOrder
-    status?: SortOrder
+    hasSpoiler?: SortOrderInput | SortOrder
+    status?: SortOrderInput | SortOrder
     publishedAt?: SortOrderInput | SortOrder
     adminNote?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -26047,8 +26117,8 @@ export namespace Prisma {
     mediaId?: StringFilter<"Review"> | string
     rating?: IntFilter<"Review"> | number
     content?: StringFilter<"Review"> | string
-    hasSpoiler?: BoolFilter<"Review"> | boolean
-    status?: EnumReviewStatusFilter<"Review"> | $Enums.ReviewStatus
+    hasSpoiler?: BoolNullableFilter<"Review"> | boolean | null
+    status?: EnumReviewStatusNullableFilter<"Review"> | $Enums.ReviewStatus | null
     publishedAt?: DateTimeNullableFilter<"Review"> | Date | string | null
     adminNote?: StringNullableFilter<"Review"> | string | null
     createdAt?: DateTimeFilter<"Review"> | Date | string
@@ -26066,8 +26136,8 @@ export namespace Prisma {
     mediaId?: SortOrder
     rating?: SortOrder
     content?: SortOrder
-    hasSpoiler?: SortOrder
-    status?: SortOrder
+    hasSpoiler?: SortOrderInput | SortOrder
+    status?: SortOrderInput | SortOrder
     publishedAt?: SortOrderInput | SortOrder
     adminNote?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -26088,8 +26158,8 @@ export namespace Prisma {
     mediaId?: StringWithAggregatesFilter<"Review"> | string
     rating?: IntWithAggregatesFilter<"Review"> | number
     content?: StringWithAggregatesFilter<"Review"> | string
-    hasSpoiler?: BoolWithAggregatesFilter<"Review"> | boolean
-    status?: EnumReviewStatusWithAggregatesFilter<"Review"> | $Enums.ReviewStatus
+    hasSpoiler?: BoolNullableWithAggregatesFilter<"Review"> | boolean | null
+    status?: EnumReviewStatusNullableWithAggregatesFilter<"Review"> | $Enums.ReviewStatus | null
     publishedAt?: DateTimeNullableWithAggregatesFilter<"Review"> | Date | string | null
     adminNote?: StringNullableWithAggregatesFilter<"Review"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Review"> | Date | string
@@ -26472,6 +26542,7 @@ export namespace Prisma {
 
   export type NotificationCreateInput = {
     id?: string
+    personId?: string | null
     title: string
     body: string
     link?: string | null
@@ -26483,6 +26554,7 @@ export namespace Prisma {
   export type NotificationUncheckedCreateInput = {
     id?: string
     userId: string
+    personId?: string | null
     title: string
     body: string
     link?: string | null
@@ -26492,6 +26564,7 @@ export namespace Prisma {
 
   export type NotificationUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    personId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26503,6 +26576,7 @@ export namespace Prisma {
   export type NotificationUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    personId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26513,6 +26587,7 @@ export namespace Prisma {
   export type NotificationCreateManyInput = {
     id?: string
     userId: string
+    personId?: string | null
     title: string
     body: string
     link?: string | null
@@ -26522,6 +26597,7 @@ export namespace Prisma {
 
   export type NotificationUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    personId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26532,6 +26608,7 @@ export namespace Prisma {
   export type NotificationUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    personId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -27074,8 +27151,9 @@ export namespace Prisma {
     streamingUrl?: string | null
     pricingTier?: $Enums.PricingTier
     status?: $Enums.MediaStatus
-    isFeatured?: boolean
-    isEditorPick?: boolean
+    isFeatured?: boolean | null
+    isEditorPick?: boolean | null
+    streamingPlatFrom?: $Enums.StreamingPlatFormEnum | null
     avgRating?: number | null
     totalRatings?: number | null
     totalReviews?: number | null
@@ -27105,8 +27183,9 @@ export namespace Prisma {
     streamingUrl?: string | null
     pricingTier?: $Enums.PricingTier
     status?: $Enums.MediaStatus
-    isFeatured?: boolean
-    isEditorPick?: boolean
+    isFeatured?: boolean | null
+    isEditorPick?: boolean | null
+    streamingPlatFrom?: $Enums.StreamingPlatFormEnum | null
     avgRating?: number | null
     totalRatings?: number | null
     totalReviews?: number | null
@@ -27136,8 +27215,9 @@ export namespace Prisma {
     streamingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pricingTier?: EnumPricingTierFieldUpdateOperationsInput | $Enums.PricingTier
     status?: EnumMediaStatusFieldUpdateOperationsInput | $Enums.MediaStatus
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isEditorPick?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isEditorPick?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    streamingPlatFrom?: NullableEnumStreamingPlatFormEnumFieldUpdateOperationsInput | $Enums.StreamingPlatFormEnum | null
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
     totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
     totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27167,8 +27247,9 @@ export namespace Prisma {
     streamingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pricingTier?: EnumPricingTierFieldUpdateOperationsInput | $Enums.PricingTier
     status?: EnumMediaStatusFieldUpdateOperationsInput | $Enums.MediaStatus
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isEditorPick?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isEditorPick?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    streamingPlatFrom?: NullableEnumStreamingPlatFormEnumFieldUpdateOperationsInput | $Enums.StreamingPlatFormEnum | null
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
     totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
     totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27198,8 +27279,9 @@ export namespace Prisma {
     streamingUrl?: string | null
     pricingTier?: $Enums.PricingTier
     status?: $Enums.MediaStatus
-    isFeatured?: boolean
-    isEditorPick?: boolean
+    isFeatured?: boolean | null
+    isEditorPick?: boolean | null
+    streamingPlatFrom?: $Enums.StreamingPlatFormEnum | null
     avgRating?: number | null
     totalRatings?: number | null
     totalReviews?: number | null
@@ -27223,8 +27305,9 @@ export namespace Prisma {
     streamingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pricingTier?: EnumPricingTierFieldUpdateOperationsInput | $Enums.PricingTier
     status?: EnumMediaStatusFieldUpdateOperationsInput | $Enums.MediaStatus
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isEditorPick?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isEditorPick?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    streamingPlatFrom?: NullableEnumStreamingPlatFormEnumFieldUpdateOperationsInput | $Enums.StreamingPlatFormEnum | null
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
     totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
     totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27248,8 +27331,9 @@ export namespace Prisma {
     streamingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pricingTier?: EnumPricingTierFieldUpdateOperationsInput | $Enums.PricingTier
     status?: EnumMediaStatusFieldUpdateOperationsInput | $Enums.MediaStatus
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isEditorPick?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isEditorPick?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    streamingPlatFrom?: NullableEnumStreamingPlatFormEnumFieldUpdateOperationsInput | $Enums.StreamingPlatFormEnum | null
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
     totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
     totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27458,8 +27542,8 @@ export namespace Prisma {
     id?: string
     rating: number
     content: string
-    hasSpoiler?: boolean
-    status?: $Enums.ReviewStatus
+    hasSpoiler?: boolean | null
+    status?: $Enums.ReviewStatus | null
     publishedAt?: Date | string | null
     adminNote?: string | null
     createdAt?: Date | string
@@ -27477,8 +27561,8 @@ export namespace Prisma {
     mediaId: string
     rating: number
     content: string
-    hasSpoiler?: boolean
-    status?: $Enums.ReviewStatus
+    hasSpoiler?: boolean | null
+    status?: $Enums.ReviewStatus | null
     publishedAt?: Date | string | null
     adminNote?: string | null
     createdAt?: Date | string
@@ -27492,8 +27576,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    hasSpoiler?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    hasSpoiler?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    status?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27511,8 +27595,8 @@ export namespace Prisma {
     mediaId?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    hasSpoiler?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    hasSpoiler?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    status?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27528,8 +27612,8 @@ export namespace Prisma {
     mediaId: string
     rating: number
     content: string
-    hasSpoiler?: boolean
-    status?: $Enums.ReviewStatus
+    hasSpoiler?: boolean | null
+    status?: $Enums.ReviewStatus | null
     publishedAt?: Date | string | null
     adminNote?: string | null
     createdAt?: Date | string
@@ -27540,8 +27624,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    hasSpoiler?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    hasSpoiler?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    status?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27554,8 +27638,8 @@ export namespace Prisma {
     mediaId?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    hasSpoiler?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    hasSpoiler?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    status?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -28006,6 +28090,7 @@ export namespace Prisma {
   export type NotificationCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    personId?: SortOrder
     title?: SortOrder
     body?: SortOrder
     link?: SortOrder
@@ -28016,6 +28101,7 @@ export namespace Prisma {
   export type NotificationMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    personId?: SortOrder
     title?: SortOrder
     body?: SortOrder
     link?: SortOrder
@@ -28026,6 +28112,7 @@ export namespace Prisma {
   export type NotificationMinOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    personId?: SortOrder
     title?: SortOrder
     body?: SortOrder
     link?: SortOrder
@@ -28457,6 +28544,18 @@ export namespace Prisma {
     not?: NestedEnumMediaStatusFilter<$PrismaModel> | $Enums.MediaStatus
   }
 
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
+  export type EnumStreamingPlatFormEnumNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.StreamingPlatFormEnum | EnumStreamingPlatFormEnumFieldRefInput<$PrismaModel> | null
+    in?: $Enums.StreamingPlatFormEnum[] | ListEnumStreamingPlatFormEnumFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.StreamingPlatFormEnum[] | ListEnumStreamingPlatFormEnumFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStreamingPlatFormEnumNullableFilter<$PrismaModel> | $Enums.StreamingPlatFormEnum | null
+  }
+
   export type FloatNullableFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -28516,6 +28615,7 @@ export namespace Prisma {
     status?: SortOrder
     isFeatured?: SortOrder
     isEditorPick?: SortOrder
+    streamingPlatFrom?: SortOrder
     avgRating?: SortOrder
     totalRatings?: SortOrder
     totalReviews?: SortOrder
@@ -28550,6 +28650,7 @@ export namespace Prisma {
     status?: SortOrder
     isFeatured?: SortOrder
     isEditorPick?: SortOrder
+    streamingPlatFrom?: SortOrder
     avgRating?: SortOrder
     totalRatings?: SortOrder
     totalReviews?: SortOrder
@@ -28575,6 +28676,7 @@ export namespace Prisma {
     status?: SortOrder
     isFeatured?: SortOrder
     isEditorPick?: SortOrder
+    streamingPlatFrom?: SortOrder
     avgRating?: SortOrder
     totalRatings?: SortOrder
     totalReviews?: SortOrder
@@ -28637,6 +28739,24 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumMediaStatusFilter<$PrismaModel>
     _max?: NestedEnumMediaStatusFilter<$PrismaModel>
+  }
+
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
+  export type EnumStreamingPlatFormEnumNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StreamingPlatFormEnum | EnumStreamingPlatFormEnumFieldRefInput<$PrismaModel> | null
+    in?: $Enums.StreamingPlatFormEnum[] | ListEnumStreamingPlatFormEnumFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.StreamingPlatFormEnum[] | ListEnumStreamingPlatFormEnumFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStreamingPlatFormEnumNullableWithAggregatesFilter<$PrismaModel> | $Enums.StreamingPlatFormEnum | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumStreamingPlatFormEnumNullableFilter<$PrismaModel>
+    _max?: NestedEnumStreamingPlatFormEnumNullableFilter<$PrismaModel>
   }
 
   export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -28810,11 +28930,11 @@ export namespace Prisma {
     order?: SortOrder
   }
 
-  export type EnumReviewStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.ReviewStatus | EnumReviewStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumReviewStatusFilter<$PrismaModel> | $Enums.ReviewStatus
+  export type EnumReviewStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReviewStatus | EnumReviewStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumReviewStatusNullableFilter<$PrismaModel> | $Enums.ReviewStatus | null
   }
 
   export type ReviewTagListRelationFilter = {
@@ -28882,14 +29002,14 @@ export namespace Prisma {
     rating?: SortOrder
   }
 
-  export type EnumReviewStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ReviewStatus | EnumReviewStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumReviewStatusWithAggregatesFilter<$PrismaModel> | $Enums.ReviewStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumReviewStatusFilter<$PrismaModel>
-    _max?: NestedEnumReviewStatusFilter<$PrismaModel>
+  export type EnumReviewStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReviewStatus | EnumReviewStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumReviewStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.ReviewStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumReviewStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumReviewStatusNullableFilter<$PrismaModel>
   }
 
   export type TagCountOrderByAggregateInput = {
@@ -29793,6 +29913,14 @@ export namespace Prisma {
     set?: $Enums.MediaStatus
   }
 
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
+  }
+
+  export type NullableEnumStreamingPlatFormEnumFieldUpdateOperationsInput = {
+    set?: $Enums.StreamingPlatFormEnum | null
+  }
+
   export type NullableFloatFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -30165,8 +30293,8 @@ export namespace Prisma {
     connect?: CommentWhereUniqueInput | CommentWhereUniqueInput[]
   }
 
-  export type EnumReviewStatusFieldUpdateOperationsInput = {
-    set?: $Enums.ReviewStatus
+  export type NullableEnumReviewStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ReviewStatus | null
   }
 
   export type UserUpdateOneRequiredWithoutReviewsNestedInput = {
@@ -30699,6 +30827,18 @@ export namespace Prisma {
     not?: NestedEnumMediaStatusFilter<$PrismaModel> | $Enums.MediaStatus
   }
 
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
+  export type NestedEnumStreamingPlatFormEnumNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.StreamingPlatFormEnum | EnumStreamingPlatFormEnumFieldRefInput<$PrismaModel> | null
+    in?: $Enums.StreamingPlatFormEnum[] | ListEnumStreamingPlatFormEnumFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.StreamingPlatFormEnum[] | ListEnumStreamingPlatFormEnumFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStreamingPlatFormEnumNullableFilter<$PrismaModel> | $Enums.StreamingPlatFormEnum | null
+  }
+
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -30778,6 +30918,24 @@ export namespace Prisma {
     _max?: NestedEnumMediaStatusFilter<$PrismaModel>
   }
 
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumStreamingPlatFormEnumNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StreamingPlatFormEnum | EnumStreamingPlatFormEnumFieldRefInput<$PrismaModel> | null
+    in?: $Enums.StreamingPlatFormEnum[] | ListEnumStreamingPlatFormEnumFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.StreamingPlatFormEnum[] | ListEnumStreamingPlatFormEnumFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStreamingPlatFormEnumNullableWithAggregatesFilter<$PrismaModel> | $Enums.StreamingPlatFormEnum | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumStreamingPlatFormEnumNullableFilter<$PrismaModel>
+    _max?: NestedEnumStreamingPlatFormEnumNullableFilter<$PrismaModel>
+  }
+
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -30826,21 +30984,21 @@ export namespace Prisma {
     _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumReviewStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.ReviewStatus | EnumReviewStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumReviewStatusFilter<$PrismaModel> | $Enums.ReviewStatus
+  export type NestedEnumReviewStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReviewStatus | EnumReviewStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumReviewStatusNullableFilter<$PrismaModel> | $Enums.ReviewStatus | null
   }
 
-  export type NestedEnumReviewStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ReviewStatus | EnumReviewStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumReviewStatusWithAggregatesFilter<$PrismaModel> | $Enums.ReviewStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumReviewStatusFilter<$PrismaModel>
-    _max?: NestedEnumReviewStatusFilter<$PrismaModel>
+  export type NestedEnumReviewStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReviewStatus | EnumReviewStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumReviewStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.ReviewStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumReviewStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumReviewStatusNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumPurchaseTypeFilter<$PrismaModel = never> = {
@@ -30990,8 +31148,9 @@ export namespace Prisma {
     streamingUrl?: string | null
     pricingTier?: $Enums.PricingTier
     status?: $Enums.MediaStatus
-    isFeatured?: boolean
-    isEditorPick?: boolean
+    isFeatured?: boolean | null
+    isEditorPick?: boolean | null
+    streamingPlatFrom?: $Enums.StreamingPlatFormEnum | null
     avgRating?: number | null
     totalRatings?: number | null
     totalReviews?: number | null
@@ -31020,8 +31179,9 @@ export namespace Prisma {
     streamingUrl?: string | null
     pricingTier?: $Enums.PricingTier
     status?: $Enums.MediaStatus
-    isFeatured?: boolean
-    isEditorPick?: boolean
+    isFeatured?: boolean | null
+    isEditorPick?: boolean | null
+    streamingPlatFrom?: $Enums.StreamingPlatFormEnum | null
     avgRating?: number | null
     totalRatings?: number | null
     totalReviews?: number | null
@@ -31121,8 +31281,9 @@ export namespace Prisma {
     streamingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pricingTier?: EnumPricingTierFieldUpdateOperationsInput | $Enums.PricingTier
     status?: EnumMediaStatusFieldUpdateOperationsInput | $Enums.MediaStatus
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isEditorPick?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isEditorPick?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    streamingPlatFrom?: NullableEnumStreamingPlatFormEnumFieldUpdateOperationsInput | $Enums.StreamingPlatFormEnum | null
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
     totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
     totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
@@ -31151,8 +31312,9 @@ export namespace Prisma {
     streamingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pricingTier?: EnumPricingTierFieldUpdateOperationsInput | $Enums.PricingTier
     status?: EnumMediaStatusFieldUpdateOperationsInput | $Enums.MediaStatus
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isEditorPick?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isEditorPick?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    streamingPlatFrom?: NullableEnumStreamingPlatFormEnumFieldUpdateOperationsInput | $Enums.StreamingPlatFormEnum | null
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
     totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
     totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
@@ -31347,8 +31509,8 @@ export namespace Prisma {
     id?: string
     rating: number
     content: string
-    hasSpoiler?: boolean
-    status?: $Enums.ReviewStatus
+    hasSpoiler?: boolean | null
+    status?: $Enums.ReviewStatus | null
     publishedAt?: Date | string | null
     adminNote?: string | null
     createdAt?: Date | string
@@ -31364,8 +31526,8 @@ export namespace Prisma {
     mediaId: string
     rating: number
     content: string
-    hasSpoiler?: boolean
-    status?: $Enums.ReviewStatus
+    hasSpoiler?: boolean | null
+    status?: $Enums.ReviewStatus | null
     publishedAt?: Date | string | null
     adminNote?: string | null
     createdAt?: Date | string
@@ -31505,6 +31667,7 @@ export namespace Prisma {
 
   export type NotificationCreateWithoutUserInput = {
     id?: string
+    personId?: string | null
     title: string
     body: string
     link?: string | null
@@ -31514,6 +31677,7 @@ export namespace Prisma {
 
   export type NotificationUncheckedCreateWithoutUserInput = {
     id?: string
+    personId?: string | null
     title: string
     body: string
     link?: string | null
@@ -31622,8 +31786,8 @@ export namespace Prisma {
     mediaId?: StringFilter<"Review"> | string
     rating?: IntFilter<"Review"> | number
     content?: StringFilter<"Review"> | string
-    hasSpoiler?: BoolFilter<"Review"> | boolean
-    status?: EnumReviewStatusFilter<"Review"> | $Enums.ReviewStatus
+    hasSpoiler?: BoolNullableFilter<"Review"> | boolean | null
+    status?: EnumReviewStatusNullableFilter<"Review"> | $Enums.ReviewStatus | null
     publishedAt?: DateTimeNullableFilter<"Review"> | Date | string | null
     adminNote?: StringNullableFilter<"Review"> | string | null
     createdAt?: DateTimeFilter<"Review"> | Date | string
@@ -31770,6 +31934,7 @@ export namespace Prisma {
     NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
     id?: StringFilter<"Notification"> | string
     userId?: StringFilter<"Notification"> | string
+    personId?: StringNullableFilter<"Notification"> | string | null
     title?: StringFilter<"Notification"> | string
     body?: StringFilter<"Notification"> | string
     link?: StringNullableFilter<"Notification"> | string | null
@@ -32143,8 +32308,8 @@ export namespace Prisma {
     id?: string
     rating: number
     content: string
-    hasSpoiler?: boolean
-    status?: $Enums.ReviewStatus
+    hasSpoiler?: boolean | null
+    status?: $Enums.ReviewStatus | null
     publishedAt?: Date | string | null
     adminNote?: string | null
     createdAt?: Date | string
@@ -32160,8 +32325,8 @@ export namespace Prisma {
     userId: string
     rating: number
     content: string
-    hasSpoiler?: boolean
-    status?: $Enums.ReviewStatus
+    hasSpoiler?: boolean | null
+    status?: $Enums.ReviewStatus | null
     publishedAt?: Date | string | null
     adminNote?: string | null
     createdAt?: Date | string
@@ -32366,8 +32531,9 @@ export namespace Prisma {
     streamingUrl?: string | null
     pricingTier?: $Enums.PricingTier
     status?: $Enums.MediaStatus
-    isFeatured?: boolean
-    isEditorPick?: boolean
+    isFeatured?: boolean | null
+    isEditorPick?: boolean | null
+    streamingPlatFrom?: $Enums.StreamingPlatFormEnum | null
     avgRating?: number | null
     totalRatings?: number | null
     totalReviews?: number | null
@@ -32396,8 +32562,9 @@ export namespace Prisma {
     streamingUrl?: string | null
     pricingTier?: $Enums.PricingTier
     status?: $Enums.MediaStatus
-    isFeatured?: boolean
-    isEditorPick?: boolean
+    isFeatured?: boolean | null
+    isEditorPick?: boolean | null
+    streamingPlatFrom?: $Enums.StreamingPlatFormEnum | null
     avgRating?: number | null
     totalRatings?: number | null
     totalReviews?: number | null
@@ -32465,8 +32632,9 @@ export namespace Prisma {
     streamingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pricingTier?: EnumPricingTierFieldUpdateOperationsInput | $Enums.PricingTier
     status?: EnumMediaStatusFieldUpdateOperationsInput | $Enums.MediaStatus
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isEditorPick?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isEditorPick?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    streamingPlatFrom?: NullableEnumStreamingPlatFormEnumFieldUpdateOperationsInput | $Enums.StreamingPlatFormEnum | null
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
     totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
     totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
@@ -32495,8 +32663,9 @@ export namespace Prisma {
     streamingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pricingTier?: EnumPricingTierFieldUpdateOperationsInput | $Enums.PricingTier
     status?: EnumMediaStatusFieldUpdateOperationsInput | $Enums.MediaStatus
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isEditorPick?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isEditorPick?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    streamingPlatFrom?: NullableEnumStreamingPlatFormEnumFieldUpdateOperationsInput | $Enums.StreamingPlatFormEnum | null
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
     totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
     totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
@@ -32554,8 +32723,9 @@ export namespace Prisma {
     streamingUrl?: string | null
     pricingTier?: $Enums.PricingTier
     status?: $Enums.MediaStatus
-    isFeatured?: boolean
-    isEditorPick?: boolean
+    isFeatured?: boolean | null
+    isEditorPick?: boolean | null
+    streamingPlatFrom?: $Enums.StreamingPlatFormEnum | null
     avgRating?: number | null
     totalRatings?: number | null
     totalReviews?: number | null
@@ -32584,8 +32754,9 @@ export namespace Prisma {
     streamingUrl?: string | null
     pricingTier?: $Enums.PricingTier
     status?: $Enums.MediaStatus
-    isFeatured?: boolean
-    isEditorPick?: boolean
+    isFeatured?: boolean | null
+    isEditorPick?: boolean | null
+    streamingPlatFrom?: $Enums.StreamingPlatFormEnum | null
     avgRating?: number | null
     totalRatings?: number | null
     totalReviews?: number | null
@@ -32651,8 +32822,9 @@ export namespace Prisma {
     streamingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pricingTier?: EnumPricingTierFieldUpdateOperationsInput | $Enums.PricingTier
     status?: EnumMediaStatusFieldUpdateOperationsInput | $Enums.MediaStatus
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isEditorPick?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isEditorPick?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    streamingPlatFrom?: NullableEnumStreamingPlatFormEnumFieldUpdateOperationsInput | $Enums.StreamingPlatFormEnum | null
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
     totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
     totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
@@ -32681,8 +32853,9 @@ export namespace Prisma {
     streamingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pricingTier?: EnumPricingTierFieldUpdateOperationsInput | $Enums.PricingTier
     status?: EnumMediaStatusFieldUpdateOperationsInput | $Enums.MediaStatus
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isEditorPick?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isEditorPick?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    streamingPlatFrom?: NullableEnumStreamingPlatFormEnumFieldUpdateOperationsInput | $Enums.StreamingPlatFormEnum | null
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
     totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
     totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
@@ -32778,8 +32951,9 @@ export namespace Prisma {
     streamingUrl?: string | null
     pricingTier?: $Enums.PricingTier
     status?: $Enums.MediaStatus
-    isFeatured?: boolean
-    isEditorPick?: boolean
+    isFeatured?: boolean | null
+    isEditorPick?: boolean | null
+    streamingPlatFrom?: $Enums.StreamingPlatFormEnum | null
     avgRating?: number | null
     totalRatings?: number | null
     totalReviews?: number | null
@@ -32808,8 +32982,9 @@ export namespace Prisma {
     streamingUrl?: string | null
     pricingTier?: $Enums.PricingTier
     status?: $Enums.MediaStatus
-    isFeatured?: boolean
-    isEditorPick?: boolean
+    isFeatured?: boolean | null
+    isEditorPick?: boolean | null
+    streamingPlatFrom?: $Enums.StreamingPlatFormEnum | null
     avgRating?: number | null
     totalRatings?: number | null
     totalReviews?: number | null
@@ -32875,8 +33050,9 @@ export namespace Prisma {
     streamingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pricingTier?: EnumPricingTierFieldUpdateOperationsInput | $Enums.PricingTier
     status?: EnumMediaStatusFieldUpdateOperationsInput | $Enums.MediaStatus
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isEditorPick?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isEditorPick?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    streamingPlatFrom?: NullableEnumStreamingPlatFormEnumFieldUpdateOperationsInput | $Enums.StreamingPlatFormEnum | null
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
     totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
     totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
@@ -32905,8 +33081,9 @@ export namespace Prisma {
     streamingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pricingTier?: EnumPricingTierFieldUpdateOperationsInput | $Enums.PricingTier
     status?: EnumMediaStatusFieldUpdateOperationsInput | $Enums.MediaStatus
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isEditorPick?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isEditorPick?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    streamingPlatFrom?: NullableEnumStreamingPlatFormEnumFieldUpdateOperationsInput | $Enums.StreamingPlatFormEnum | null
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
     totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
     totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
@@ -33011,8 +33188,9 @@ export namespace Prisma {
     streamingUrl?: string | null
     pricingTier?: $Enums.PricingTier
     status?: $Enums.MediaStatus
-    isFeatured?: boolean
-    isEditorPick?: boolean
+    isFeatured?: boolean | null
+    isEditorPick?: boolean | null
+    streamingPlatFrom?: $Enums.StreamingPlatFormEnum | null
     avgRating?: number | null
     totalRatings?: number | null
     totalReviews?: number | null
@@ -33041,8 +33219,9 @@ export namespace Prisma {
     streamingUrl?: string | null
     pricingTier?: $Enums.PricingTier
     status?: $Enums.MediaStatus
-    isFeatured?: boolean
-    isEditorPick?: boolean
+    isFeatured?: boolean | null
+    isEditorPick?: boolean | null
+    streamingPlatFrom?: $Enums.StreamingPlatFormEnum | null
     avgRating?: number | null
     totalRatings?: number | null
     totalReviews?: number | null
@@ -33214,8 +33393,9 @@ export namespace Prisma {
     streamingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pricingTier?: EnumPricingTierFieldUpdateOperationsInput | $Enums.PricingTier
     status?: EnumMediaStatusFieldUpdateOperationsInput | $Enums.MediaStatus
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isEditorPick?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isEditorPick?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    streamingPlatFrom?: NullableEnumStreamingPlatFormEnumFieldUpdateOperationsInput | $Enums.StreamingPlatFormEnum | null
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
     totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
     totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
@@ -33244,8 +33424,9 @@ export namespace Prisma {
     streamingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pricingTier?: EnumPricingTierFieldUpdateOperationsInput | $Enums.PricingTier
     status?: EnumMediaStatusFieldUpdateOperationsInput | $Enums.MediaStatus
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isEditorPick?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isEditorPick?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    streamingPlatFrom?: NullableEnumStreamingPlatFormEnumFieldUpdateOperationsInput | $Enums.StreamingPlatFormEnum | null
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
     totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
     totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
@@ -33354,8 +33535,8 @@ export namespace Prisma {
     id?: string
     rating: number
     content: string
-    hasSpoiler?: boolean
-    status?: $Enums.ReviewStatus
+    hasSpoiler?: boolean | null
+    status?: $Enums.ReviewStatus | null
     publishedAt?: Date | string | null
     adminNote?: string | null
     createdAt?: Date | string
@@ -33372,8 +33553,8 @@ export namespace Prisma {
     mediaId: string
     rating: number
     content: string
-    hasSpoiler?: boolean
-    status?: $Enums.ReviewStatus
+    hasSpoiler?: boolean | null
+    status?: $Enums.ReviewStatus | null
     publishedAt?: Date | string | null
     adminNote?: string | null
     createdAt?: Date | string
@@ -33419,8 +33600,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    hasSpoiler?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    hasSpoiler?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    status?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33437,8 +33618,8 @@ export namespace Prisma {
     mediaId?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    hasSpoiler?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    hasSpoiler?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    status?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33523,8 +33704,8 @@ export namespace Prisma {
     id?: string
     rating: number
     content: string
-    hasSpoiler?: boolean
-    status?: $Enums.ReviewStatus
+    hasSpoiler?: boolean | null
+    status?: $Enums.ReviewStatus | null
     publishedAt?: Date | string | null
     adminNote?: string | null
     createdAt?: Date | string
@@ -33541,8 +33722,8 @@ export namespace Prisma {
     mediaId: string
     rating: number
     content: string
-    hasSpoiler?: boolean
-    status?: $Enums.ReviewStatus
+    hasSpoiler?: boolean | null
+    status?: $Enums.ReviewStatus | null
     publishedAt?: Date | string | null
     adminNote?: string | null
     createdAt?: Date | string
@@ -33626,8 +33807,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    hasSpoiler?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    hasSpoiler?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    status?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33644,8 +33825,8 @@ export namespace Prisma {
     mediaId?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    hasSpoiler?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    hasSpoiler?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    status?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33707,8 +33888,8 @@ export namespace Prisma {
     id?: string
     rating: number
     content: string
-    hasSpoiler?: boolean
-    status?: $Enums.ReviewStatus
+    hasSpoiler?: boolean | null
+    status?: $Enums.ReviewStatus | null
     publishedAt?: Date | string | null
     adminNote?: string | null
     createdAt?: Date | string
@@ -33725,8 +33906,8 @@ export namespace Prisma {
     mediaId: string
     rating: number
     content: string
-    hasSpoiler?: boolean
-    status?: $Enums.ReviewStatus
+    hasSpoiler?: boolean | null
+    status?: $Enums.ReviewStatus | null
     publishedAt?: Date | string | null
     adminNote?: string | null
     createdAt?: Date | string
@@ -33869,8 +34050,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    hasSpoiler?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    hasSpoiler?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    status?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33887,8 +34068,8 @@ export namespace Prisma {
     mediaId?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    hasSpoiler?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    hasSpoiler?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    status?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34009,8 +34190,9 @@ export namespace Prisma {
     streamingUrl?: string | null
     pricingTier?: $Enums.PricingTier
     status?: $Enums.MediaStatus
-    isFeatured?: boolean
-    isEditorPick?: boolean
+    isFeatured?: boolean | null
+    isEditorPick?: boolean | null
+    streamingPlatFrom?: $Enums.StreamingPlatFormEnum | null
     avgRating?: number | null
     totalRatings?: number | null
     totalReviews?: number | null
@@ -34039,8 +34221,9 @@ export namespace Prisma {
     streamingUrl?: string | null
     pricingTier?: $Enums.PricingTier
     status?: $Enums.MediaStatus
-    isFeatured?: boolean
-    isEditorPick?: boolean
+    isFeatured?: boolean | null
+    isEditorPick?: boolean | null
+    streamingPlatFrom?: $Enums.StreamingPlatFormEnum | null
     avgRating?: number | null
     totalRatings?: number | null
     totalReviews?: number | null
@@ -34140,8 +34323,9 @@ export namespace Prisma {
     streamingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pricingTier?: EnumPricingTierFieldUpdateOperationsInput | $Enums.PricingTier
     status?: EnumMediaStatusFieldUpdateOperationsInput | $Enums.MediaStatus
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isEditorPick?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isEditorPick?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    streamingPlatFrom?: NullableEnumStreamingPlatFormEnumFieldUpdateOperationsInput | $Enums.StreamingPlatFormEnum | null
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
     totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
     totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
@@ -34170,8 +34354,9 @@ export namespace Prisma {
     streamingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pricingTier?: EnumPricingTierFieldUpdateOperationsInput | $Enums.PricingTier
     status?: EnumMediaStatusFieldUpdateOperationsInput | $Enums.MediaStatus
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isEditorPick?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isEditorPick?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    streamingPlatFrom?: NullableEnumStreamingPlatFormEnumFieldUpdateOperationsInput | $Enums.StreamingPlatFormEnum | null
     avgRating?: NullableFloatFieldUpdateOperationsInput | number | null
     totalRatings?: NullableIntFieldUpdateOperationsInput | number | null
     totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
@@ -34217,8 +34402,8 @@ export namespace Prisma {
     mediaId: string
     rating: number
     content: string
-    hasSpoiler?: boolean
-    status?: $Enums.ReviewStatus
+    hasSpoiler?: boolean | null
+    status?: $Enums.ReviewStatus | null
     publishedAt?: Date | string | null
     adminNote?: string | null
     createdAt?: Date | string
@@ -34265,6 +34450,7 @@ export namespace Prisma {
 
   export type NotificationCreateManyUserInput = {
     id?: string
+    personId?: string | null
     title: string
     body: string
     link?: string | null
@@ -34354,8 +34540,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    hasSpoiler?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    hasSpoiler?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    status?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34371,8 +34557,8 @@ export namespace Prisma {
     mediaId?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    hasSpoiler?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    hasSpoiler?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    status?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34387,8 +34573,8 @@ export namespace Prisma {
     mediaId?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    hasSpoiler?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    hasSpoiler?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    status?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34513,6 +34699,7 @@ export namespace Prisma {
 
   export type NotificationUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    personId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34522,6 +34709,7 @@ export namespace Prisma {
 
   export type NotificationUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    personId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34531,6 +34719,7 @@ export namespace Prisma {
 
   export type NotificationUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    personId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34600,8 +34789,8 @@ export namespace Prisma {
     userId: string
     rating: number
     content: string
-    hasSpoiler?: boolean
-    status?: $Enums.ReviewStatus
+    hasSpoiler?: boolean | null
+    status?: $Enums.ReviewStatus | null
     publishedAt?: Date | string | null
     adminNote?: string | null
     createdAt?: Date | string
@@ -34685,8 +34874,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    hasSpoiler?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    hasSpoiler?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    status?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34702,8 +34891,8 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    hasSpoiler?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    hasSpoiler?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    status?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34718,8 +34907,8 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    hasSpoiler?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    hasSpoiler?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    status?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

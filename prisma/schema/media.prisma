@@ -42,6 +42,7 @@ model Media {
   status       MediaStatus @default(PUBLISHED)
   isFeatured   Boolean?     @default(false)
   isEditorPick Boolean?    @default(false)
+  streamingPlatFrom StreamingPlatFormEnum? @default(YOUTUBE)
 
   // Aggregated rating cache — updated via background job or trigger
   avgRating    Float?

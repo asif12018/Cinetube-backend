@@ -69,3 +69,14 @@ enum Gender {
   FEMALE
   OTHER
 }
+
+enum StreamingPlatFormEnum {
+  NETFLIX
+  AMAZON_PRIME
+  DISNEY_PLUS
+  HBO_MAX
+  HULU
+  APPLE_TV
+  YOUTUBE
+  OTHER
+}

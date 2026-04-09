@@ -26,6 +26,7 @@ model WatchlistItem {
 model Notification {
   id        String   @id @default(cuid())
   userId    String
+  personId  String?
   title     String
   body      String
   link      String? // deep link in the app
@@ -191,6 +192,17 @@ enum Gender {
   OTHER
 }
 
+enum StreamingPlatFormEnum {
+  NETFLIX
+  AMAZON_PRIME
+  DISNEY_PLUS
+  HBO_MAX
+  HULU
+  APPLE_TV
+  YOUTUBE
+  OTHER
+}
+
 // =============================================================
 // MEDIA LIBRARY
 // =============================================================
@@ -220,21 +232,22 @@ model StreamingPlatform {
 }
 
 model Media {
-  id           String      @id @default(uuid(7))
-  title        String
-  slug         String      @unique
-  synopsis     String
-  type         MediaType
-  releaseYear  Int
-  director     String?
-  posterUrl    String?
-  backdropUrl  String?
-  trailerUrl   String? // YouTube embed URL
-  streamingUrl String? // direct streaming/YouTube link
-  pricingTier  PricingTier @default(PREMIUM)
-  status       MediaStatus @default(PUBLISHED)
-  isFeatured   Boolean     @default(false)
-  isEditorPick Boolean     @default(false)
+  id                String                 @id @default(uuid(7))
+  title             String
+  slug              String                 @unique
+  synopsis          String
+  type              MediaType
+  releaseYear       Int
+  director          String?
+  posterUrl         String?
+  backdropUrl       String?
+  trailerUrl        String? // YouTube embed URL
+  streamingUrl      String? // direct streaming/YouTube link
+  pricingTier       PricingTier            @default(PREMIUM)
+  status            MediaStatus            @default(PUBLISHED)
+  isFeatured        Boolean?               @default(false)
+  isEditorPick      Boolean?               @default(false)
+  streamingPlatFrom StreamingPlatFormEnum? @default(YOUTUBE)
 
   // Aggregated rating cache — updated via background job or trigger
   avgRating    Float?
@@ -329,14 +342,14 @@ model MediaCast {
 // =============================================================
 
 model Review {
-  id          String       @id @default(uuid(7))
+  id          String        @id @default(uuid(7))
   userId      String
   mediaId     String
   rating      Int // 1–10
   content     String
-  hasSpoiler  Boolean      @default(false)
-  status      ReviewStatus @default(PENDING)
-  publishedAt DateTime?
+  hasSpoiler  Boolean?      @default(false)
+  status      ReviewStatus? @default(PENDING)
+  publishedAt DateTime?     @default(now())
   adminNote   String? // reason for unpublishing
 
   createdAt DateTime @default(now())

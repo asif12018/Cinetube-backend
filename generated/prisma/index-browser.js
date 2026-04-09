@@ -130,6 +130,7 @@ exports.Prisma.WatchlistItemScalarFieldEnum = {
 exports.Prisma.NotificationScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  personId: 'personId',
   title: 'title',
   body: 'body',
   link: 'link',
@@ -222,6 +223,7 @@ exports.Prisma.MediaScalarFieldEnum = {
   status: 'status',
   isFeatured: 'isFeatured',
   isEditorPick: 'isEditorPick',
+  streamingPlatFrom: 'streamingPlatFrom',
   avgRating: 'avgRating',
   totalRatings: 'totalRatings',
   totalReviews: 'totalReviews',
@@ -370,6 +372,17 @@ exports.MediaStatus = exports.$Enums.MediaStatus = {
   PUBLISHED: 'PUBLISHED',
   DRAFT: 'DRAFT',
   ARCHIVED: 'ARCHIVED'
+};
+
+exports.StreamingPlatFormEnum = exports.$Enums.StreamingPlatFormEnum = {
+  NETFLIX: 'NETFLIX',
+  AMAZON_PRIME: 'AMAZON_PRIME',
+  DISNEY_PLUS: 'DISNEY_PLUS',
+  HBO_MAX: 'HBO_MAX',
+  HULU: 'HULU',
+  APPLE_TV: 'APPLE_TV',
+  YOUTUBE: 'YOUTUBE',
+  OTHER: 'OTHER'
 };
 
 exports.ReviewStatus = exports.$Enums.ReviewStatus = {

@@ -26,6 +26,7 @@ model WatchlistItem {
 model Notification {
   id        String   @id @default(cuid())
   userId    String
+  personId  String?
   title     String
   body      String
   link      String?  // deep link in the app

@@ -3,6 +3,11 @@ import { prisma } from "../../lib/prisma"; // Adjust path to your prisma instanc
 import AppError from "../../../errorHelpers/AppError"; // Adjust path to your error handler
 import { ICreateMedia, IUpdateMedia } from "./media.interface"; // Adjust path to your interfaces
 import { deleteFileFromCloudinary } from "../../utils/cloudinary.config";
+import { QueryBuilder } from "../../utils/QueryBuilder";
+import { Media, Prisma } from "../../../../generated/prisma";
+
+import { mediaFilterableFields, mediaIncludeConfig, mediaSearchableFields } from "./media.constant";
+import { IQueryParams } from "../../../interface/query.interface";
 
 // =============================================================
 // 1. CREATE MEDIA
@@ -170,14 +175,33 @@ const updateMedia = async (id: string, payload: IUpdateMedia) => {
 // =============================================================
 // 3. GET ALL MEDIA
 // =============================================================
-const getAllMedia = async () => {
-  const result = await prisma.media.findMany({
-    include: {
-      cast: { include: { actor: true } },
-      genres: { include: { genre: true } },
-    },
-  });
-  return result;
+const getAllMedia = async (query: IQueryParams) => {
+    const queryBuilder = new QueryBuilder<Media, Prisma.MediaWhereInput, Prisma.MediaInclude>(
+        prisma.media,
+        query,
+        {
+            searchableFields: mediaSearchableFields,
+            filterableFields: mediaFilterableFields, // Make sure this contains 'genres.genre.name'
+        }
+    );
+
+    const queryInstance = queryBuilder
+        .search()
+        .filter()
+        .include({
+            cast: { include: { actor: true } },
+            genres: { include: { genre: true } },
+        })
+        .dynamicInclude(mediaIncludeConfig)
+        .paginate()
+        .sort()
+        .fields();
+
+    // 🔴 ADD THESE TWO LINES HERE:
+    console.log("1. WHAT EXPRESS SEES (req.query):", query);
+    console.log("2. WHAT PRISMA SEES (where clause):", JSON.stringify(queryInstance.getQuery().where, null, 2));
+
+    return await queryInstance.execute();
 };
 
 // =============================================================
