@@ -8,6 +8,7 @@ import { TagRoutes } from "../modules/tags/tags.routes";
 import { ReviewRoutes } from "../modules/reviews/reviews.routes";
 import { NotificationRoutes } from "../modules/notification/notification.routes";
 import { CommentRoutes } from "../modules/comment/comment.routes";
+import { ReviewLikeRoutes } from "../modules/reviewLike/reviewLike.routes";
 
 
 const router = Router();
@@ -30,6 +31,7 @@ router.use("/tags", TagRoutes);
 router.use("/reviews", ReviewRoutes);
 router.use("/notification", NotificationRoutes);
 router.use("/comment", CommentRoutes);
+router.use("/like", ReviewLikeRoutes);
 
 
 

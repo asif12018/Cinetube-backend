@@ -58,7 +58,7 @@ const likeNotification = async(userId: string, personId: string) =>{
         userId: personData.id,
         personId: userData.id,
         title: "Like",
-        body: `${userData.name} liked your profile`,
+        body: `${userData.name} liked your review`,
         link: `/profile/${personData.id}`,
         isRead: false
     }
@@ -84,7 +84,7 @@ const commentNotification = async(userId: string, personId: string) =>{
             userId: personData.id,
             personId: userData.id,
             title: "Comment",
-            body: `${userData.name} commented on your profile`,
+            body: `${userData.name} commented on your review`,
             link: `/profile/${userData.id}`,
             isRead: false
         }

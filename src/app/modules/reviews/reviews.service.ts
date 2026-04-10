@@ -174,6 +174,8 @@ const getReviewsByMediaId = async (mediaId: string) => {
 
   
 
+  
+
   if (!isMediaExist) {
     throw new AppError(status.NOT_FOUND, "Media not found.");
   }
