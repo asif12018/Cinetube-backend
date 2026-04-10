@@ -204,6 +204,7 @@ const getReviewsByMediaId = async (mediaId: string) => {
           tag: true,
         },
       },
+      comments:true
     },
   });
 
