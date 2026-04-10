@@ -28,6 +28,7 @@ model User {
   watchlist       WatchlistItem[]
   purchases       Purchase[]
   notifications   Notification[]
+  subscription Subscription[]
 
   @@map("user")
 }

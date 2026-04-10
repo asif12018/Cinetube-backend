@@ -311,12 +311,27 @@ exports.Prisma.PurchaseScalarFieldEnum = {
   type: 'type',
   amount: 'amount',
   currency: 'currency',
+  accessTimeStartedAt: 'accessTimeStartedAt',
   accessExpiresAt: 'accessExpiresAt',
   paymentStatus: 'paymentStatus',
   paymentProvider: 'paymentProvider',
   providerTxnId: 'providerTxnId',
   providerPayload: 'providerPayload',
   refundedAt: 'refundedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SubscriptionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  currentPeriodStart: 'currentPeriodStart',
+  currentPeriodEnd: 'currentPeriodEnd',
+  cancelAtPeriodEnd: 'cancelAtPeriodEnd',
+  paymentProvider: 'paymentProvider',
+  providerSubId: 'providerSubId',
+  stripeCustomerId: 'stripeCustomerId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -392,7 +407,6 @@ exports.ReviewStatus = exports.$Enums.ReviewStatus = {
 };
 
 exports.PurchaseType = exports.$Enums.PurchaseType = {
-  SUBSCRIPTION: 'SUBSCRIPTION',
   RENTAL: 'RENTAL',
   ONE_TIME_BUY: 'ONE_TIME_BUY'
 };
@@ -402,6 +416,14 @@ exports.PaymentStatus = exports.$Enums.PaymentStatus = {
   COMPLETED: 'COMPLETED',
   FAILED: 'FAILED',
   REFUNDED: 'REFUNDED'
+};
+
+exports.SubscriptionStatus = exports.$Enums.SubscriptionStatus = {
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  CANCELLED: 'CANCELLED',
+  EXPIRED: 'EXPIRED',
+  PAST_DUE: 'PAST_DUE'
 };
 
 exports.Prisma.ModelName = {
@@ -423,7 +445,8 @@ exports.Prisma.ModelName = {
   ReviewTag: 'ReviewTag',
   ReviewLike: 'ReviewLike',
   Comment: 'Comment',
-  Purchase: 'Purchase'
+  Purchase: 'Purchase',
+  Subscription: 'Subscription'
 };
 
 /**

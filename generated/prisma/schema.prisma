@@ -69,6 +69,7 @@ model User {
   watchlist     WatchlistItem[]
   purchases     Purchase[]
   notifications Notification[]
+  subscription  Subscription[]
 
   @@map("user")
 }
@@ -167,6 +168,7 @@ enum SubscriptionPlan {
 }
 
 enum SubscriptionStatus {
+  PENDING
   ACTIVE
   CANCELLED
   EXPIRED
@@ -174,7 +176,6 @@ enum SubscriptionStatus {
 }
 
 enum PurchaseType {
-  SUBSCRIPTION
   RENTAL
   ONE_TIME_BUY
 }
@@ -472,7 +473,8 @@ model Purchase {
   currency String  @default("USD")
 
   // 3. If they rent it, this stores when their 48-hour access expires
-  accessExpiresAt DateTime?
+  accessTimeStartedAt DateTime?
+  accessExpiresAt     DateTime?
 
   paymentStatus   PaymentStatus @default(PENDING)
   paymentProvider String? // "stripe" | "sslcommerz"
@@ -490,4 +492,29 @@ model Purchase {
   @@index([mediaId])
   @@index([paymentStatus])
   @@map("purchase")
+}
+
+model Subscription {
+  id     String             @id @default(uuid(7))
+  userId String             @unique
+  status SubscriptionStatus @default(PENDING) // ACTIVE, PAST_DUE, CANCELED
+
+  // 🟢 The exact billing cycle dates (Updated by Stripe/Webhook every month)
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+
+  // 🟢 Pro-tip: If they cancel, they still get to watch until the 'End' date
+  cancelAtPeriodEnd Boolean @default(false)
+
+  // Tracking details
+  paymentProvider  String? // "stripe", "sslcommerz"
+  providerSubId    String? @unique
+  stripeCustomerId String?
+
+  createdAt DateTime @default(now()) // When they first subscribed ever
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("subscription")
 }
