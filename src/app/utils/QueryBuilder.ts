@@ -43,37 +43,100 @@ export class QueryBuilder<
         }
     }
 
-    search(): this {
-        const { searchTerm } = this.queryParams;
-        const { searchableFields } = this.config;
+    // search(): this {
+    //     const { searchTerm } = this.queryParams;
+    //     const { searchableFields } = this.config;
 
-        if (searchTerm && searchableFields && searchableFields.length > 0) {
-            const searchConditions: Record<string, unknown>[] = searchableFields.map((field) => {
+    //     if (searchTerm && searchableFields && searchableFields.length > 0) {
+    //         const searchConditions: Record<string, unknown>[] = searchableFields.map((field) => {
+    //             if (field.includes(".")) {
+    //                 const parts = field.split(".");
+
+    //                 if (parts.length === 2) {
+    //                     const [relation, nestedField] = parts;
+    //                     const stringFilter: PrismaStringFilter = {
+    //                         contains: searchTerm,
+    //                         mode: 'insensitive' as const,
+    //                     }
+    //                     return {
+    //                         [relation]: {
+    //                             [nestedField]: stringFilter
+    //                         }
+    //                     }
+    //                 } else if (parts.length === 3) {
+    //                     const [relation, nestedRelation, nestedField] = parts;
+    //                     const stringFilter: PrismaStringFilter = {
+    //                         contains: searchTerm,
+    //                         mode: 'insensitive' as const,
+    //                     }
+    //                     return {
+    //                         [relation]: {
+    //                             some: {
+    //                                 [nestedRelation]: {
+    //                                     [nestedField]: stringFilter
+    //                                 }
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //             }
+                
+    //             // direct field
+    //             const stringFilter: PrismaStringFilter = {
+    //                 contains: searchTerm,
+    //                 mode: 'insensitive' as const,
+    //             }
+    //             return {
+    //                 [field]: stringFilter
+    //             }
+    //         });
+
+    //         const whereConditions = this.query.where as PrismaWhereConditions
+    //         whereConditions.OR = searchConditions;
+
+    //         const countWhereConditions = this.countQuery.where as PrismaWhereConditions;
+    //         countWhereConditions.OR = searchConditions;
+    //     }
+
+    //     return this;
+    // }
+
+    search(): this {
+    const { searchTerm } = this.queryParams;
+    const { searchableFields } = this.config;
+
+    if (searchTerm && searchableFields && searchableFields.length > 0) {
+        const searchConditions: Record<string, unknown>[] = searchableFields
+            .map((field) => {
+                // 🟢 NEW: Skip fields that are Enums (like streamingPlatFrom)
+                // because they don't support 'contains' or 'mode: insensitive'
+                if (field === "streamingPlatFrom") {
+                    return null; 
+                }
+
                 if (field.includes(".")) {
                     const parts = field.split(".");
 
                     if (parts.length === 2) {
                         const [relation, nestedField] = parts;
-                        const stringFilter: PrismaStringFilter = {
-                            contains: searchTerm,
-                            mode: 'insensitive' as const,
-                        }
                         return {
                             [relation]: {
-                                [nestedField]: stringFilter
+                                [nestedField]: {
+                                    contains: searchTerm,
+                                    mode: 'insensitive',
+                                }
                             }
                         }
                     } else if (parts.length === 3) {
                         const [relation, nestedRelation, nestedField] = parts;
-                        const stringFilter: PrismaStringFilter = {
-                            contains: searchTerm,
-                            mode: 'insensitive' as const,
-                        }
                         return {
                             [relation]: {
                                 some: {
                                     [nestedRelation]: {
-                                        [nestedField]: stringFilter
+                                        [nestedField]: {
+                                            contains: searchTerm,
+                                            mode: 'insensitive',
+                                        }
                                     }
                                 }
                             }
@@ -81,25 +144,25 @@ export class QueryBuilder<
                     }
                 }
                 
-                // direct field
-                const stringFilter: PrismaStringFilter = {
-                    contains: searchTerm,
-                    mode: 'insensitive' as const,
-                }
+                // Default direct field search
                 return {
-                    [field]: stringFilter
+                    [field]: {
+                        contains: searchTerm,
+                        mode: 'insensitive',
+                    }
                 }
-            });
+            })
+            .filter(Boolean) as Record<string, unknown>[]; // Remove the nulls
 
-            const whereConditions = this.query.where as PrismaWhereConditions
-            whereConditions.OR = searchConditions;
+        const whereConditions = this.query.where as PrismaWhereConditions
+        whereConditions.OR = searchConditions;
 
-            const countWhereConditions = this.countQuery.where as PrismaWhereConditions;
-            countWhereConditions.OR = searchConditions;
-        }
-
-        return this;
+        const countWhereConditions = this.countQuery.where as PrismaWhereConditions;
+        countWhereConditions.OR = searchConditions;
     }
+
+    return this;
+}
 
     filter(): this {
         const { filterableFields } = this.config;
@@ -255,6 +318,16 @@ export class QueryBuilder<
         this.sortBy = sortBy;
         this.sortOrder = sortOrder;
 
+        // 🟢 INSERT THE LOGIC HERE
+    if (sortBy === 'mostReviewed') {
+        this.query.orderBy = {
+            reviews: { // Ensure 'reviews' is the exact name of the relation in your schema
+                _count: sortOrder
+            }
+        };
+        return this; // Exit early since we handled the special case
+    }
+
         if (sortBy.includes(".")) {
             const parts = sortBy.split(".");
 
@@ -389,29 +462,64 @@ export class QueryBuilder<
         return result;
     }
 
-    private parseFilterValue(value: unknown): unknown {
-        if (value === 'true') return true;
-        if (value === 'false') return false;
+    // private parseFilterValue(value: unknown): unknown {
+    //     if (value === 'true') return true;
+    //     if (value === 'false') return false;
         
-        if (typeof value === 'string' && !isNaN(Number(value)) && value != "") {
-            return Number(value);
-        }
+    //     if (typeof value === 'string' && !isNaN(Number(value)) && value != "") {
+    //         return Number(value);
+    //     }
 
-        if (Array.isArray(value)) {
-            return { in: value.map(String) };
-        }
+    //     if (Array.isArray(value)) {
+    //         return { in: value.map(String) };
+    //     }
 
-        // NEW LOGIC: Handle Case Insensitivity & Comma-Separated Strings
-        if (typeof value === 'string') {
-            if (value.includes(',')) {
-                const arr = value.split(',').map((v) => v.trim());
-                return { in: arr }; 
-            }
-            return { equals: value, mode: 'insensitive' };
-        }
+    //     // NEW LOGIC: Handle Case Insensitivity & Comma-Separated Strings
+    //     if (typeof value === 'string') {
+    //         if (value.includes(',')) {
+    //             const arr = value.split(',').map((v) => v.trim());
+    //             return { in: arr }; 
+    //         }
+    //         return { equals: value, mode: 'insensitive' };
+    //     }
 
-        return value;
+    //     return value;
+    // }
+
+    private parseFilterValue(value: unknown): unknown {
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    
+    if (typeof value === 'string' && !isNaN(Number(value)) && value != "") {
+        return Number(value);
     }
+
+    if (Array.isArray(value)) {
+        return { in: value.map(String) };
+    }
+
+    if (typeof value === 'string') {
+        if (value.includes(',')) {
+            const arr = value.split(',').map((v) => v.trim());
+            return { in: arr }; 
+        }
+
+        // 🟢 FIX: If the value is ALL CAPS, it's likely an Enum.
+        // Prisma Enums are case-sensitive. 
+        // We only apply 'insensitive' if the field is a regular string.
+        
+        // Check if the value matches an Enum pattern (usually all caps)
+        const isEnumValue = value === value.toUpperCase() && value !== value.toLowerCase();
+
+        if (isEnumValue) {
+            return value; // Return exact value for Enums (no mode: insensitive)
+        }
+
+        return { equals: value, mode: 'insensitive' };
+    }
+
+    return value;
+}
 
     private parseRangeFilter(value: Record<string, string | number>): PrismaNumberFilter | PrismaStringFilter | Record<string, unknown> {
         const rangeQuery: Record<string, string | number | (string | number)[]> = {};
