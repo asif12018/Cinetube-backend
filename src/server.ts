@@ -33,7 +33,7 @@ const shutdown = (signal: string, exitCode: number = 0) => {
 // process.on("SIGTERM", () => shutdown("SIGTERM", 0));
 
 // SIGINT signal handler
-process.on("SIGINT", () => shutdown("SIGINT", 0));
+// process.on("SIGINT", () => shutdown("SIGINT", 0));
 
 // Uncaught exception handler
 process.on("uncaughtException", (error) => {
