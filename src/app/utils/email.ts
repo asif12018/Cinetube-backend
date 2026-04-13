@@ -5,17 +5,34 @@ import status from "http-status";
 import path from "path";
 import config from "../config";
 import ejs from "ejs";
+// const transporter = nodemailer.createTransport({
+//     host: config.EMAIL_SENDER_SMTP_HOST,
+//     secure: true,
+//     auth: {
+//         user: config.EMAIL_SENDER_SMTP_USER,
+//         pass: config.EMAIL_SENDER_SMTP_PASS
+//     },
+//     port: Number(config.EMAIL_SENDER_SMTP_PORT),
+// });
+
 const transporter = nodemailer.createTransport({
     host: config.EMAIL_SENDER_SMTP_HOST,
-    secure: Number(config.EMAIL_SENDER_SMTP_PORT) === 465,
+    port: Number(config.EMAIL_SENDER_SMTP_PORT),
+    secure: false, // MUST be false for port 587
+    requireTLS: true, // Upgrades the connection securely
     auth: {
         user: config.EMAIL_SENDER_SMTP_USER,
         pass: config.EMAIL_SENDER_SMTP_PASS
     },
-    port: Number(config.EMAIL_SENDER_SMTP_PORT),
     tls: {
-    rejectUnauthorized: false
-  }
+        rejectUnauthorized: false
+    },
+    // 🚨 THE FIX: Forces Nodemailer to use IPv4 so Render doesn't block it
+    family: 4, 
+    // ⚡ THE SPEED BOOST: Keeps the email connection alive
+    pool: true, 
+    maxConnections: 1,
+    maxMessages: 100,
 });
 
 //email interface
