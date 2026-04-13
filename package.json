@@ -8,7 +8,7 @@
   "type": "module",
   "main": "dist/server.js",
   "scripts": {
-    "start": "node ./dist/src/server.js",
+    "start": "node ./dist/server.js",
     "dev": "tsx watch src/server.ts",
     "build": "prisma generate && tsc && node scripts/fix-imports.js",
     "build:tsup": "tsup",
