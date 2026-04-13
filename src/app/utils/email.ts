@@ -7,7 +7,7 @@ import config from "../config";
 import ejs from "ejs";
 const transporter = nodemailer.createTransport({
     host: config.EMAIL_SENDER_SMTP_HOST,
-    secure: true,
+    secure: Number(config.EMAIL_SENDER_SMTP_PORT) === 465,
     auth: {
         user: config.EMAIL_SENDER_SMTP_USER,
         pass: config.EMAIL_SENDER_SMTP_PASS

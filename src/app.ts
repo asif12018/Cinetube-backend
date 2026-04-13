@@ -46,7 +46,8 @@
 // app.use(globalErrorHandler);
 
 // export default app;
-
+import dns from 'node:dns';
+dns.setDefaultResultOrder('ipv4first');
 
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
@@ -61,8 +62,7 @@ import { PaymentRoutes } from "./app/modules/purchase/payment.routes";
 
 const app: Application = express();
 
-import dns from 'node:dns';
-dns.setDefaultResultOrder('ipv4first');
+
 
 // 1. GLOBALS (Must be at the very top)
 app.use(cors({
