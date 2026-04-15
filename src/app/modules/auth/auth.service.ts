@@ -18,6 +18,15 @@ const registerUser = async (payload: IRegisterUserPayload) => {
   const maxAgeOfRefreshToken = ms(
     config.REFRESH_TOKEN_EXPIRES_IN as StringValue,
   );
+  //checking if the user already exist
+  const isUserExist = await prisma.user.findFirst({
+    where:{
+      email: payload.email
+    }
+  });
+  if(isUserExist){
+    throw new AppError(status.BAD_REQUEST,"User with email already exist")
+  }
   const data = await auth.api.signUpEmail({
     body: payload,
   });
