@@ -349,6 +349,27 @@ const forgetPassword = async(email: string) =>{
   return result;
 };
 
+
+//user info for auth
+const getMeAuth = async(user:IRequestUser) =>{
+     const isUserExist = await prisma.user.findUnique({
+      where:{
+        id: user.userId
+      },
+      include:{
+        watchlist: true,
+        reviews: true,
+        comments: true,
+      }
+     });
+
+     if(!isUserExist){
+      throw new AppError(status.NOT_FOUND, "User not exist")
+     }
+
+     return isUserExist
+}
+
 export const AuthServices = {
   registerUser,
   logInUser,
@@ -359,5 +380,6 @@ export const AuthServices = {
   forgetPassword,
   resetPassword,
   logOutUser,
-  resendOTP
+  resendOTP,
+  getMeAuth
 };

@@ -205,6 +205,20 @@ const resendOTP = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+
+//get user info for verification
+
+const getMeAuth = catchAsync(async(req:Request, res:Response)=>{
+  const user = req.user;
+  const result = await AuthServices.getMeAuth(user);
+  sendResponse(res,{
+    httpStatusCode: status.OK,
+    success: true,
+    message:"User profile fetch successfully",
+    data:result
+  })
+})
+
 export const AuthController = {
   registerUser,
   logInUser,
@@ -215,5 +229,6 @@ export const AuthController = {
   forgetPassword,
   resetPassword,
   logOutUser,
-  resendOTP
+  resendOTP,
+  getMeAuth
 };

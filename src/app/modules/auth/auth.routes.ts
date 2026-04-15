@@ -24,6 +24,7 @@ router.post("/forget-password", AuthController.forgetPassword);
 router.post("/reset-password", AuthController.resetPassword);
 router.post("/logout", checkAuth(Role.USER, Role.ADMIN, Role.SUPER_ADMIN), AuthController.logOutUser);
 router.post("/resend-otp", AuthController.resendOTP);
+router.get("/authUser", checkAuth(Role.ADMIN, Role.SUPER_ADMIN, Role.USER), AuthController.getMeAuth);
 
 
 export const AuthRoutes = router;
