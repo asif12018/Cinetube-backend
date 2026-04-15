@@ -7,15 +7,27 @@ import config from "../config";
 import ejs from "ejs";
 
 
+// const transporter = nodemailer.createTransport({
+//     host: config.EMAIL_SENDER_SMTP_HOST,
+//     secure: true,
+//     auth: {
+//         user: config.EMAIL_SENDER_SMTP_USER,
+//         pass: config.EMAIL_SENDER_SMTP_PASS
+//     },
+//     port: Number(config.EMAIL_SENDER_SMTP_PORT),
+// });
+
 const transporter = nodemailer.createTransport({
-    host: config.EMAIL_SENDER_SMTP_HOST,
-    secure: true,
-    auth: {
-        user: config.EMAIL_SENDER_SMTP_USER,
-        pass: config.EMAIL_SENDER_SMTP_PASS
-    },
-    port: Number(config.EMAIL_SENDER_SMTP_PORT),
+  service: "gmail",
+  auth: {
+    type: "OAuth2",
+    user: config.GMAIL_USER,
+    clientId: config.GMAIL_CLIENT_ID,
+    clientSecret: config.GMAIL_CLIENT_SECRET,
+    refreshToken: config.GMAIL_REFRESH_TOKEN,
+  },
 });
+
 
 
 

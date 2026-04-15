@@ -9,18 +9,20 @@ import AppError from "../../../errorHelpers/AppError";
 
 //register a user
 const registerUser = catchAsync(async (req: Request, res: Response) => {
-  let payload = req.body;
+  let payload = req?.body;
   // console.log("=== REGISTER DEBUG ===");
   // console.log("req.body:", req.body);
   // console.log("req.file:", req.file);
   // console.log("req.files:", req.files);
   // console.log("================");
 
-  if (req.body.data) {
+  console.log(payload, "payload from server")
+
+  if (req.body?.data) {
     payload = JSON.parse(req.body.data);
   }
 
-  if (req.file) {
+  if (req?.file) {
     payload.image = req.file.path;
   }
 
