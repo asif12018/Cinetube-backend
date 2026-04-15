@@ -16,7 +16,7 @@ const registerUser = catchAsync(async (req: Request, res: Response) => {
   // console.log("req.files:", req.files);
   // console.log("================");
 
-  console.log(payload, "payload from server")
+  console.log(payload, "payload from server");
 
   if (req.body?.data) {
     payload = JSON.parse(req.body.data);
@@ -63,8 +63,8 @@ const updateUser = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
   const payload = req.body;
   let user = req.user;
-  if(req.file){
-    payload.image = req.file.path
+  if (req.file) {
+    payload.image = req.file.path;
   }
   const result = await AuthServices.updateUser(id as string, payload, user);
   sendResponse(res, {
@@ -154,32 +154,32 @@ const resetPassword = catchAsync(async (req: Request, res: Response) => {
 
 //logout user
 
-const logOutUser = catchAsync(async(req:Request, res:Response)=>{
-    const sessionToken = req.cookies["better-auth.session_token"];
-    const result = await AuthServices.logOutUser(sessionToken);
-    //clear all the cookies
-    CookieUtils.clearCookie(res, 'accessToken', {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none'
-    });
-    CookieUtils.clearCookie(res, 'refreshToken', {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none'
-    });
-    CookieUtils.clearCookie(res, 'better-auth.session_token', {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none'
-    });
-    sendResponse(res,{
-        httpStatusCode:status.OK,
-        success: true,
-        message:"User logged out successfully",
-        data: result
-    })
-})
+const logOutUser = catchAsync(async (req: Request, res: Response) => {
+  const sessionToken = req.cookies["better-auth.session_token"];
+  const result = await AuthServices.logOutUser(sessionToken);
+  //clear all the cookies
+  CookieUtils.clearCookie(res, "accessToken", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
+  CookieUtils.clearCookie(res, "refreshToken", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
+  CookieUtils.clearCookie(res, "better-auth.session_token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
+  sendResponse(res, {
+    httpStatusCode: status.OK,
+    success: true,
+    message: "User logged out successfully",
+    data: result,
+  });
+});
 
 //resend email
 
@@ -205,19 +205,25 @@ const resendOTP = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-
 //get user info for verification
 
-const getMeAuth = catchAsync(async(req:Request, res:Response)=>{
+const getMeAuth = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;
+  console.log("this is user:", user);
+  if (!user) {
+    throw new AppError(
+      status.UNAUTHORIZED,
+      "Unauthorized access! User is not authenticated.",
+    );
+  }
   const result = await AuthServices.getMeAuth(user);
-  sendResponse(res,{
+  sendResponse(res, {
     httpStatusCode: status.OK,
     success: true,
-    message:"User profile fetch successfully",
-    data:result
-  })
-})
+    message: "User profile fetch successfully",
+    data: result,
+  });
+});
 
 export const AuthController = {
   registerUser,
@@ -230,5 +236,5 @@ export const AuthController = {
   resetPassword,
   logOutUser,
   resendOTP,
-  getMeAuth
+  getMeAuth,
 };

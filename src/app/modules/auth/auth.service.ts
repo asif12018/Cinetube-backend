@@ -1,7 +1,12 @@
 import status from "http-status";
 import AppError from "../../../errorHelpers/AppError";
 import { auth } from "../../lib/auth";
-import { ILoginUserPayload, IRegisterUserPayload, IUpdateUserPayload, IVerifyEmailOtpPayload } from "./auth.interface";
+import {
+  ILoginUserPayload,
+  IRegisterUserPayload,
+  IUpdateUserPayload,
+  IVerifyEmailOtpPayload,
+} from "./auth.interface";
 import { tokenUtils } from "../../utils/token";
 import config from "../../config";
 import { prisma } from "../../lib/prisma";
@@ -20,12 +25,12 @@ const registerUser = async (payload: IRegisterUserPayload) => {
   );
   //checking if the user already exist
   const isUserExist = await prisma.user.findFirst({
-    where:{
-      email: payload.email
-    }
+    where: {
+      email: payload.email,
+    },
   });
-  if(isUserExist){
-    throw new AppError(status.BAD_REQUEST,"User with email already exist")
+  if (isUserExist) {
+    throw new AppError(status.BAD_REQUEST, "User with email already exist");
   }
   const data = await auth.api.signUpEmail({
     body: payload,
@@ -134,193 +139,214 @@ const logInUser = async (payload: ILoginUserPayload) => {
 
 //todo update user
 
-const updateUser = async (id:string,payload: IUpdateUserPayload, user:IRequestUser) =>{
+const updateUser = async (
+  id: string,
+  payload: IUpdateUserPayload,
+  user: IRequestUser,
+) => {
   const isDoctorExist = await prisma.user.findFirstOrThrow({
-    where:{
-      id:id,
-      email: user.email
-    }
-  })
+    where: {
+      id: id,
+      email: user.email,
+    },
+  });
 
-  console.log("all photos url", isDoctorExist.image, payload.image)
+  console.log("all photos url", isDoctorExist.image, payload.image);
   //deleting photo if its exist
-  if(isDoctorExist.image && payload.image){
+  if (isDoctorExist.image && payload.image) {
     await deleteFileFromCloudinary(isDoctorExist.image);
   }
   const result = await prisma.user.update({
-    where:{
-      id: isDoctorExist.id
+    where: {
+      id: isDoctorExist.id,
     },
     data: {
       name: payload.name,
       image: payload.image,
-      gender: payload.gender
-    }
-  })
+      gender: payload.gender,
+    },
+  });
 
   return result;
-}
-
+};
 
 //verify email with otp
 
-const verifyEmailOtp = async (payload: IVerifyEmailOtpPayload) =>{
-  const result = await auth.api.verifyEmailOTP({body: payload})
-  if(!result){
-    throw new AppError(status.BAD_REQUEST, "invalid email or otp")
+const verifyEmailOtp = async (payload: IVerifyEmailOtpPayload) => {
+  const result = await auth.api.verifyEmailOTP({ body: payload });
+  if (!result) {
+    throw new AppError(status.BAD_REQUEST, "invalid email or otp");
   }
   return result;
-}
+};
 
 //get user own profile
 
-const getMe = async(user:IRequestUser) =>{
+const getMe = async (user: IRequestUser) => {
   // console.log(user,'payload user')
   const userData = await prisma.user.findFirstOrThrow({
-    where:{
-      email:user.email
+    where: {
+      email: user.email,
     },
-    include:{
-      reviews:true,
-      reviewLikes:true,
-      comments:true,
-      watchlist:true,
-      purchases:true,
-      notifications:true
-    }
+    include: {
+      reviews: true,
+      reviewLikes: true,
+      comments: true,
+      watchlist: true,
+      purchases: true,
+      notifications: true,
+    },
   });
 
   // console.log(userData,'user data')
-  if(user.userId !== userData.id){
-    throw new AppError(status.UNAUTHORIZED,"You dont have permission to perform this action")
+  if (user.userId !== userData.id) {
+    throw new AppError(
+      status.UNAUTHORIZED,
+      "You dont have permission to perform this action",
+    );
   }
 
-  return userData
-}
-
-
+  return userData;
+};
 
 //get new  refresh token
 
-const getNewToken = async(refreshToken:string, sessionToken: string) =>{
+const getNewToken = async (refreshToken: string, sessionToken: string) => {
   const isSessionTokenExist = await prisma.session.findUnique({
-    where:{
-      token:sessionToken
+    where: {
+      token: sessionToken,
     },
-    include:{
-      user:true
-    }
+    include: {
+      user: true,
+    },
   });
 
-  if(!isSessionTokenExist){
-       throw new AppError(status.BAD_REQUEST, "invalid session token")
+  if (!isSessionTokenExist) {
+    throw new AppError(status.BAD_REQUEST, "invalid session token");
   }
 
-  if(isSessionTokenExist.user.banned === true){
-    throw new AppError(status.UNAUTHORIZED, "You are banned from accessing this service")
+  if (isSessionTokenExist.user.banned === true) {
+    throw new AppError(
+      status.UNAUTHORIZED,
+      "You are banned from accessing this service",
+    );
   }
-   
+
   //verify the refresh token
-  const verifiedRefreshToken = jwtUtils.verifyToken(refreshToken, config.REFRESH_TOKEN_SECRET as string);
+  const verifiedRefreshToken = jwtUtils.verifyToken(
+    refreshToken,
+    config.REFRESH_TOKEN_SECRET as string,
+  );
 
-  if(!verifiedRefreshToken.success && verifiedRefreshToken.err){
-     throw new AppError(status.UNAUTHORIZED, "invalid refresh token")
+  if (!verifiedRefreshToken.success && verifiedRefreshToken.err) {
+    throw new AppError(status.UNAUTHORIZED, "invalid refresh token");
   }
 
   const data = verifiedRefreshToken.data as JwtPayload;
   const newAccessToken = tokenUtils.getAccessToken({
     userId: data.userId,
     email: data.email,
-    role: data.role
+    role: data.role,
   });
 
-  const newRefreshToken = tokenUtils.getRefreshToken({userId: data.userId, email: data.email, role: data.role});
+  const newRefreshToken = tokenUtils.getRefreshToken({
+    userId: data.userId,
+    email: data.email,
+    role: data.role,
+  });
 
   //update the session token
-  const {token} = await prisma.session.update({
-    where:{
-      token: sessionToken
+  const { token } = await prisma.session.update({
+    where: {
+      token: sessionToken,
     },
-    data:{
+    data: {
       token: newRefreshToken,
       expiresAt: new Date(Date.now() + 60 * 60 * 24 * 1000),
       updatedAt: new Date(),
-    }
-  })
+    },
+  });
 
   return {
     accessToken: newAccessToken,
     refreshToken: newRefreshToken,
-    sessionToken: token
-  }
-}
+    sessionToken: token,
+  };
+};
 
 //forget password
 
-const forgetPassword = async(email: string) =>{
-   const isUserExist = await prisma.user.findUnique({
-    where:{
-      email: email
-    }
-   })
+const forgetPassword = async (email: string) => {
+  const isUserExist = await prisma.user.findUnique({
+    where: {
+      email: email,
+    },
+  });
 
-   if(!isUserExist){
-    throw new AppError(status.BAD_REQUEST, "User not found")
-   }
+  if (!isUserExist) {
+    throw new AppError(status.BAD_REQUEST, "User not found");
+  }
 
-   if(isUserExist.banned === true){
-     throw new AppError(status.UNAUTHORIZED, "You are banned from accessing this service")
-   }
+  if (isUserExist.banned === true) {
+    throw new AppError(
+      status.UNAUTHORIZED,
+      "You are banned from accessing this service",
+    );
+  }
 
-   // reset password request
-   await auth.api.requestPasswordResetEmailOTP({
-    body:{
-      email:email
-    }
-   });
-   
-}
+  // reset password request
+  await auth.api.requestPasswordResetEmailOTP({
+    body: {
+      email: email,
+    },
+  });
+};
+
+//reset password
+
+const resetPassword = async (
+  email: string,
+  otp: string,
+  newPassword: string,
+) => {
+  const isUserExist = await prisma.user.findUnique({
+    where: {
+      email: email,
+    },
+  });
+
+  if (!isUserExist) {
+    throw new AppError(status.BAD_REQUEST, "User not found");
+  }
+
+  if (isUserExist.banned === true) {
+    throw new AppError(
+      status.UNAUTHORIZED,
+      "You are banned from accessing this service",
+    );
+  }
 
   //reset password
+  await auth.api.resetPasswordEmailOTP({
+    body: {
+      email: email,
+      otp: otp,
+      password: newPassword,
+    },
+  });
 
-  const resetPassword = async(email: string, otp: string, newPassword: string) =>{
-    const isUserExist = await prisma.user.findUnique({
-      where:{
-        email: email
-      }
-    });
+  //deleting the session to logout all the device
 
-    if(!isUserExist){
-      throw new AppError(status.BAD_REQUEST, "User not found")
-    }
+  await prisma.session.deleteMany({
+    where: {
+      userId: isUserExist.id,
+    },
+  });
+};
 
-    if(isUserExist.banned === true){
-      throw new AppError(status.UNAUTHORIZED, "You are banned from accessing this service")
-    }
+//resend otp for user
 
-    //reset password
-    await auth.api.resetPasswordEmailOTP({
-      body:{
-        email: email,
-        otp: otp,
-        password: newPassword
-      }
-    });
-
-    //deleting the session to logout all the device
-
-    await prisma.session.deleteMany({
-      where:{
-        userId: isUserExist.id
-      }
-    });
-
-
-  }
-  
-  //resend otp for user
-
- const resendOTP = async (email: string) => {
+const resendOTP = async (email: string) => {
   try {
     // Calling Better-Auth's internal API directly from the server
     await auth.api.sendVerificationOTP({
@@ -333,13 +359,16 @@ const forgetPassword = async(email: string) =>{
 
     return null; // The auth config handles the actual email sending
   } catch (error) {
-    throw new AppError(status.INTERNAL_SERVER_ERROR, "Failed to generate new OTP");
+    throw new AppError(
+      status.INTERNAL_SERVER_ERROR,
+      "Failed to generate new OTP",
+    );
   }
 };
 
-  //logout
+//logout
 
-  const logOutUser = async (sessionToken: string) => {
+const logOutUser = async (sessionToken: string) => {
   const result = await auth.api.signOut({
     headers: new Headers({
       Authorization: `Bearer ${sessionToken}`,
@@ -349,26 +378,25 @@ const forgetPassword = async(email: string) =>{
   return result;
 };
 
-
 //user info for auth
-const getMeAuth = async(user:IRequestUser) =>{
-     const isUserExist = await prisma.user.findUnique({
-      where:{
-        id: user.userId
-      },
-      include:{
-        watchlist: true,
-        reviews: true,
-        comments: true,
-      }
-     });
+const getMeAuth = async (user: IRequestUser) => {
+  const isUserExist = await prisma.user.findUnique({
+    where: {
+      id: user.userId,
+    },
+    include: {
+      watchlist: true,
+      reviews: true,
+      comments: true,
+    },
+  });
 
-     if(!isUserExist){
-      throw new AppError(status.NOT_FOUND, "User not exist")
-     }
+  if (!isUserExist) {
+    throw new AppError(status.NOT_FOUND, "User not exist");
+  }
 
-     return isUserExist
-}
+  return isUserExist;
+};
 
 export const AuthServices = {
   registerUser,
@@ -381,5 +409,5 @@ export const AuthServices = {
   resetPassword,
   logOutUser,
   resendOTP,
-  getMeAuth
+  getMeAuth,
 };
