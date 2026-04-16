@@ -191,6 +191,7 @@ const getAllMedia = async (query: IQueryParams) => {
         .include({
             cast: { include: { actor: true } },
             genres: { include: { genre: true } },
+            reviews: {include: {likes: true}}
         })
         .dynamicInclude(mediaIncludeConfig)
         .paginate()
