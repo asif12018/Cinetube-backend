@@ -19,7 +19,7 @@ export class QueryBuilder<
     private query: PrismaFindManyArgs;
     private countQuery: PrismaCountArgs;
     private page: number = 1;
-    private limit: number = 2;
+    private limit: number = 10;
     private skip: number = 0;
     private sortBy: string = 'createdAt';
     private sortOrder: 'asc' | 'desc' = 'desc';
