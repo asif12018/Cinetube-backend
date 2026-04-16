@@ -205,6 +205,7 @@ const updateMedia = async (id: string, payload: IUpdateMedia) => {
 //     return await queryInstance.execute();
 // };
 
+
 const getAllMedia = async (query: IQueryParams) => {
     const queryBuilder = new QueryBuilder<Media, Prisma.MediaWhereInput, Prisma.MediaInclude>(
         prisma.media,
@@ -221,20 +222,27 @@ const getAllMedia = async (query: IQueryParams) => {
         .include({
             cast: { include: { actor: true } },
             genres: { include: { genre: true } },
-            reviews: { include: { likes: true } } // Includes the reviews and their likes
+            reviews: { include: { likes: true } }
         })
         .dynamicInclude(mediaIncludeConfig)
         .paginate()
         .sort() 
         .fields();
 
+    // 🔴 GRAB THE PRISMA QUERY BEFORE IT RUNS
     const prismaQuery = queryInstance.getQuery();
     
-    // 🔴 OVERRIDE FOR "MOST LIKED" AND "MOST REVIEWED" 🔴
-    if (query.sortBy === 'likes') {
-        // Sort by the total number of reviews that exist
-        // Note: Prisma currently struggles to sort by deeply nested _counts (e.g., counting the likes inside the reviews inside the media). 
-        // The most reliable way to sort movies relationally in Prisma without raw SQL is to sort by total reviews:
+    // Fix 1: Top Rated (Force movies with no ratings to the bottom)
+    if (query.sortBy === 'avgRating') {
+        prismaQuery.orderBy = {
+            avgRating: {
+                sort: query.sortOrder || 'desc',
+                nulls: 'last' // <--- THIS IS THE MAGIC FIX
+            }
+        };
+    } 
+    // Fix 2: Most Liked / Most Reviewed (If you added this earlier)
+    else if (query.sortBy === 'likes') {
         prismaQuery.orderBy = {
             reviews: {
                 _count: query.sortOrder || 'desc'
@@ -244,7 +252,6 @@ const getAllMedia = async (query: IQueryParams) => {
 
     return await queryInstance.execute();
 };
-
 // =============================================================
 // 4. GET MEDIA BY ID
 // =============================================================
