@@ -78,10 +78,49 @@ const getUserWatchList = async(userId: string) =>{
 }
 
 
+//check is the movie on the watchlist
+
+const isMovieOnTheWatchList = async(movieId:string, userId: string) =>{
+    const isTheMovieExist = await prisma.media.findFirst({
+        where:{
+            id:movieId
+        }
+    })
+
+    const isTheUserExist = await prisma.user.findFirst({
+        where:{
+            id:userId
+        }
+    })
+
+    if(!isTheMovieExist){
+        throw new AppError(status.NOT_FOUND, "Movie not exist");
+    }
+
+    if(!isTheUserExist){
+        throw new AppError(status.NOT_FOUND, "user not found")
+    }
+
+    const result = await prisma.watchlistItem.findFirst({
+        where:{
+            mediaId:movieId,
+            userId:userId
+        }
+    });
+
+    if(!result){
+        return false
+    }
+
+    return true
+}
+
+
 
 
 
 export const WatchListService = {
     toggleWatchList,
-    getUserWatchList
+    getUserWatchList,
+    isMovieOnTheWatchList
 }

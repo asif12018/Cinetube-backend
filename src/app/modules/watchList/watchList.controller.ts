@@ -37,10 +37,25 @@ const getUserWatchList = catchAsync(async(req:Request, res:Response)=>{
 })
 
 
+const isMovieOnTheWatchList = catchAsync(async(req:Request, res:Response)=>{
+    const user = req.user;
+    const movieId = req.body.movieId;
+    const result = await WatchListService.isMovieOnTheWatchList(movieId, user.userId);
+
+    sendResponse(res,{
+        httpStatusCode: status.OK,
+        message:"List checked successfully",
+        success:true,
+        data: result
+    })
+})
+
+
 
 
 
 export const WatchListController = {
     toggleWatchList,
-    getUserWatchList
+    getUserWatchList,
+    isMovieOnTheWatchList
 }

@@ -13,5 +13,7 @@ router.post("/:id", checkAuth(Role.ADMIN, Role.SUPER_ADMIN, Role.USER), WatchLis
 
 router.get("/", checkAuth(Role.ADMIN, Role.SUPER_ADMIN, Role.USER), WatchListController.getUserWatchList);
 
+router.get("/checkWatchList", checkAuth(Role.ADMIN, Role.SUPER_ADMIN, Role.USER), WatchListController.isMovieOnTheWatchList);
+
 
 export const WatchListRoutes = router;
