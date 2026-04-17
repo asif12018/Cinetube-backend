@@ -398,7 +398,7 @@ const handleStripeWebhookEvent = async (event: Stripe.Event) => {
 
 const createCheckoutSession = async (
   userId: string,
-  mediaId: string,
+  mediaId: string, // Can be an empty string or null if they are just buying a subscription from a generic page
   type: "RENTAL" | "SUBSCRIPTION" | "ONE_TIME_BUY",
 ) => {
   let unitAmount = 0;
@@ -406,10 +406,12 @@ const createCheckoutSession = async (
   let mode: "payment" | "subscription" = "payment";
   let dbRecordId = "";
 
-  // 🟢 DYNAMIC PRICE FETCHING & VALIDATION
+  const now = new Date();
+
+  // ==========================================
+  // RENTAL & BUY LOGIC
+  // ==========================================
   if (type === "RENTAL" || type === "ONE_TIME_BUY") {
-    
-    // 1. Fetch existing COMPLETED transactions for this user and media
     const existingPurchases = await prisma.purchase.findMany({
       where: {
         userId,
@@ -418,15 +420,12 @@ const createCheckoutSession = async (
       },
     });
 
-    // 2. If they already permanently own it, block them from buying OR renting it again
     const ownsMovie = existingPurchases.some(p => p.type === PurchaseType.ONE_TIME_BUY);
     if (ownsMovie) {
       throw new AppError(status.CONFLICT, "You already own this title permanently.");
     }
 
-    // 3. If they are trying to rent it, check if they already have an ACTIVE rental
     if (type === "RENTAL") {
-      const now = new Date();
       const hasActiveRental = existingPurchases.some(
         p => p.type === PurchaseType.RENTAL && p.accessExpiresAt && p.accessExpiresAt > now
       );
@@ -435,7 +434,6 @@ const createCheckoutSession = async (
       }
     }
 
-    // 4. Fetch the movie details
     const movie = await prisma.media.findUniqueOrThrow({
       where: { id: mediaId },
     });
@@ -443,7 +441,7 @@ const createCheckoutSession = async (
     const rawPrice =
       type === "RENTAL" ? (movie.rentPrice?.toNumber() ?? 3) : (movie.buyPrice?.toNumber() ?? 15);
 
-    unitAmount = Math.round(rawPrice * 100); // Stripe needs cents
+    unitAmount = Math.round(rawPrice * 100); 
     name = `${type === "RENTAL" ? "Rent" : "Buy"}: ${movie.title}`;
     mode = "payment";
 
@@ -457,23 +455,45 @@ const createCheckoutSession = async (
     });
     dbRecordId = purchase.id;
 
+  // ==========================================
+  // SUBSCRIPTION LOGIC
+  // ==========================================
   } else if (type === "SUBSCRIPTION") {
+    
+    // 1. Check if the user already exists in the subscription table
+    const existingSubscription = await prisma.subscription.findUnique({
+      where: { userId },
+    });
+
+    // 2. If they have an ACTIVE subscription and it hasn't expired, block them from buying again
+    if (
+      existingSubscription && 
+      existingSubscription.status === SubscriptionStatus.ACTIVE && 
+      existingSubscription.currentPeriodEnd > now
+    ) {
+      throw new AppError(status.CONFLICT, "You already have an active premium subscription.");
+    }
+
     unitAmount = 7500; // $75.00 fixed
     name = "Premium Monthly Subscription";
     mode = "subscription";
 
+    // 3. Upsert is now safe because we know they aren't currently active
     const sub = await prisma.subscription.upsert({
       where: { userId },
-      update: { status: SubscriptionStatus.PENDING },
+      update: { status: SubscriptionStatus.PENDING }, 
       create: {
         userId,
-        currentPeriodStart: new Date(),
-        currentPeriodEnd: new Date(),
+        currentPeriodStart: now,
+        currentPeriodEnd: now,
       },
     });
     dbRecordId = sub.id;
   }
 
+  // ==========================================
+  // STRIPE SESSION CREATION
+  // ==========================================
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     mode: mode,
