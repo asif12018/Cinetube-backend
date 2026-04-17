@@ -7,6 +7,8 @@ import {
   SubscriptionStatus,
   PurchaseType,
 } from "@prisma/client";
+import AppError from "../../../errorHelpers/AppError";
+import status from "http-status";
 
 // const handleStripeWebhookEvent = async (event: Stripe.Event) => {
 //   switch (event.type) {
@@ -421,9 +423,70 @@ const createCustomerPortal = async (userId: string) => {
   return { portalUrl: portalSession.url };
 };
 
+//get purchase by id
+
+const getPurchaseInfo = async (userId: string, mediaId: string) => {
+  // Check if a completed purchase exists for this user and media
+  const purchase = await prisma.purchase.findFirst({
+    where: {
+      userId: userId,
+      mediaId: mediaId,
+      paymentStatus: PaymentStatus.COMPLETED,
+    },
+  });
+
+  if (!purchase) {
+    throw new AppError(status.NOT_FOUND, "No valid completed purchase found for this media.");
+  }
+
+  // If the purchase is a rental, we must check the expiration date
+  if (purchase.type === PurchaseType.RENTAL) {
+    const now = new Date();
+    
+    // If access hasn't been started/set, or if the current date is past the expiration date
+    if (!purchase.accessExpiresAt || purchase.accessExpiresAt < now) {
+      throw new AppError(status.FORBIDDEN, "Your rental period for this media has expired.");
+    }
+  }
+
+  // If it's a ONE_TIME_BUY, or a valid RENTAL, they have access
+  return true; // Or return the 'purchase' object if you need its data later
+};
+
+
+const getSubscriptionInfo = async (userId: string) => {
+  // Since userId is @unique in the Subscription model, use findUnique for better performance
+  const subscription = await prisma.subscription.findUnique({
+    where: {
+      userId: userId,
+    },
+  });
+
+  if (!subscription) {
+    throw new AppError(status.NOT_FOUND, "User is not subscribed.");
+  }
+
+  const now = new Date();
+
+  // Check if the subscription status is ACTIVE
+  if (subscription.status !== SubscriptionStatus.ACTIVE) {
+    throw new AppError(status.FORBIDDEN, `Subscription is not active. Current status: ${subscription.status}`);
+  }
+
+  // Ensure the user's billing period hasn't ended. 
+  // This honors the `cancelAtPeriodEnd` logic: if they canceled but the period end is in the future, they still get access.
+  if (subscription.currentPeriodEnd < now) {
+    throw new AppError(status.FORBIDDEN, "Subscription access period has expired.");
+  }
+
+  return true; // Or return the 'subscription' object
+};
+
 export const PaymentService = {
   handleStripeWebhookEvent,
   createCheckoutSession,
   cancelSubscription,
-  createCustomerPortal
+  createCustomerPortal,
+  getSubscriptionInfo,
+  getPurchaseInfo
 };

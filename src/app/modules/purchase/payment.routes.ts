@@ -37,4 +37,8 @@ router.post(
 );
 
 
+router.get("/getPurchase/:id", checkAuth(Role.ADMIN,Role.SUPER_ADMIN, Role.USER), PaymentController.getPurchaseInfo);
+router.get("/getSubscription", checkAuth(Role.ADMIN, Role.SUPER_ADMIN, Role.USER), PaymentController.getSubscriptionInfo);
+
+
 export const PaymentRoutes = router;

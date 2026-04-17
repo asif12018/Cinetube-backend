@@ -8,38 +8,7 @@ import { sendResponse } from "../../shared/sendResponse";
 import { stripe } from "../../config/stripe.config";
 
 
-// Initialize Stripe (Make sure you add STRIPE_SECRET_KEY to your .env file)
-// const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-//     apiVersion: "2023-10-16", // Use your current Stripe API version
-// });
 
-// const handleStripeWebhookEvent = async (req: Request, res: Response) => {
-//     const signature = req.headers["stripe-signature"] as string;
-//     const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET as string; // Get this from your Stripe Dashboard
-
-//     let event: Stripe.Event;
-
-//     try {
-//         // 1. Verify the signature using the RAW body
-//         // Note: req.body MUST be a Buffer here, not a JSON object!
-//         event = stripe.webhooks.constructEvent(req.body, signature, endpointSecret);
-//     } catch (err: any) {
-//         console.error("⚠️ Webhook signature verification failed.", err.message);
-//         // If verification fails, return a 400 error immediately
-//         return res.status(400).send(`Webhook Error: ${err.message}`);
-//     }
-
-//     // 2. If verified, pass the event to the Service we just wrote
-//     try {
-//         const result = await PaymentService.handleStripeWebhookEvent(event);
-        
-//         // 3. Always return a 200 OK quickly so Stripe knows you received it
-//         res.status(200).json(result);
-//     } catch (error) {
-//         console.error("❌ Error processing webhook:", error);
-//         res.status(500).json({ error: "Internal Server Error" });
-//     }
-// };
 
 const handleStripeWebhookEvent = catchAsync(async (req : Request, res : Response) => {
     const signature = req.headers['stripe-signature'] as string
@@ -129,7 +98,33 @@ const createCustomerPortal = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-// Export it:
+
+
+const getPurchaseInfo = catchAsync(async(req:Request, res:Response)=>{
+    const user = req.user;
+    const mediaId = req.params.id;
+    const result = await PaymentService.getPurchaseInfo(user.userId, mediaId as string);
+
+    sendResponse(res,{
+        httpStatusCode: status.OK,
+        message:"Purchase data retrieved successful",
+        success: true,
+        data: result
+    })
+})
+
+
+const getSubscriptionInfo = catchAsync(async(req:Request, res:Response)=>{
+    const user = req.user;
+    const result = await PaymentService.getSubscriptionInfo(user.userId);
+
+    sendResponse(res,{
+        httpStatusCode: status.OK,
+        message:"Subscription data retrieved successful",
+        success: true,
+        data: result
+    })
+})
 
 
 
@@ -137,5 +132,7 @@ export const PaymentController = {
     handleStripeWebhookEvent,
     createCheckout,
     cancelSubscription,
-    createCustomerPortal
+    createCustomerPortal,
+    getPurchaseInfo,
+    getSubscriptionInfo
 };
