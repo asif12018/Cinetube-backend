@@ -266,6 +266,34 @@ const getUnPublishedReview = async()=>{
 }
 
 
+const isUserHasReview = async(mediaId:string, userId:string) =>{
+  const isMovieExist = await prisma.media.findFirst({
+    where:{
+      id:mediaId
+    }
+  });
+
+  const isUserExist = await prisma.user.findFirst({
+    where:{
+      id:userId
+    }
+  })
+
+  const isReviewExistForExist = await prisma.review.findFirst({
+    where:{
+      userId:userId,
+      mediaId: mediaId
+    }
+  });
+
+  if(!isReviewExistForExist){
+    return false
+  }
+
+  return true
+}
+
+
 
 
 
@@ -276,5 +304,6 @@ export const ReviewService = {
     updateReview,
     getReviewsByMediaId,
     updateReviewStatus,
-    getUnPublishedReview
+    getUnPublishedReview,
+    isUserHasReview
 }

@@ -89,13 +89,27 @@ const getUnPublishedReview = catchAsync(async(req:Request, res:Response)=>{
 })
 
 
+const isUserHasReview = catchAsync(async(req:Request, res:Response)=>{
+    const user = req.user;
+    const mediaId = req.params.id;
+    const result = await ReviewService.isUserHasReview(mediaId as string, user.userId);
+    sendResponse(res,{
+        httpStatusCode: status.OK,
+        success: true,
+        message:"User has review status checked successfully",
+        data: result
+    })
+})
+
+
 
 export const ReviewController = {
     createReview,
     updateReview,
     updateReviewStatus,
     getUnPublishedReview,
-    getReviewByMedia
+    getReviewByMedia,
+    isUserHasReview
 }
 
 
