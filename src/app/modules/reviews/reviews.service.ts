@@ -206,7 +206,11 @@ const getReviewsByMediaId = async (mediaId: string) => {
           tag: true,
         },
       },
-      comments:true
+      comments:{
+        include:{
+          user:true
+        }
+      }
     },
   });
 
