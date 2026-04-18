@@ -49,18 +49,35 @@ const updateReview = catchAsync(async(req:Request, res:Response)=>{
 
 
 
-const getReviewByMedia = catchAsync(async(req:Request, res:Response)=>{
+// const getReviewByMedia = catchAsync(async(req:Request, res:Response)=>{
+//     const mediaId = req.params.id;
+//     const result = await ReviewService.getReviewsByMediaId(mediaId as string);
+//     sendResponse(res,{
+//         httpStatusCode: status.OK,
+//         success: true,
+//         message:"Review retrieved successfully",
+//         data: result
+//     })
+// });
+
+const getReviewByMedia = catchAsync(async(req: Request, res: Response) => {
     const mediaId = req.params.id;
-    const result = await ReviewService.getReviewsByMediaId(mediaId as string);
-    sendResponse(res,{
+    
+    // 🟢 1. Extract the user ID. 
+    // (Assuming your auth middleware attaches the user to the request object)
+    // If they aren't logged in, this safely becomes undefined.
+    const userId = (req as any).user?.id || req.user?.id; 
+
+    // 🟢 2. Pass the userId as the second argument!
+    const result = await ReviewService.getReviewsByMediaId(mediaId as string, userId);
+    
+    sendResponse(res, {
         httpStatusCode: status.OK,
         success: true,
-        message:"Review retrieved successfully",
+        message: "Review retrieved successfully",
         data: result
     })
 });
-
-
 
 
 const updateReviewStatus = catchAsync(async(req:Request, res:Response)=>{

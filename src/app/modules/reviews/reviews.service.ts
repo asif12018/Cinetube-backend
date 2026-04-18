@@ -166,15 +166,63 @@ const updateReview = async (reviewId: string, userId: string, payload: IUpdateRe
 
 
 
-const getReviewsByMediaId = async (mediaId: string) => {
+// const getReviewsByMediaId = async (mediaId: string) => {
+//   // 1. Verify the movie/series actually exists
+//   const isMediaExist = await prisma.media.findUnique({
+//     where: { id: mediaId },
+//   });
+
+  
+
+  
+
+//   if (!isMediaExist) {
+//     throw new AppError(status.NOT_FOUND, "Media not found.");
+//   }
+
+//   // 2. Fetch the reviews
+//   const reviews = await prisma.review.findMany({
+//     where: {
+//       mediaId: mediaId,
+//       status: "PUBLISHED", // Security: Only fetch approved reviews!
+//     },
+//     // Sort by newest first
+//     orderBy: {
+//       createdAt: "desc", 
+//     },
+//     include: {
+//       // Include the User who wrote it (we use 'select' so we don't accidentally leak their password/email)
+//       user: {
+//         select: {
+//           id: true,
+//           // Assuming your user model has a name and photo, add them here:
+//           // name: true, 
+//           // profilePhoto: true 
+//         },
+//       },
+//       // Include the tags
+//       tags: {
+//         include: {
+//           tag: true,
+//         },
+//       },
+//       comments:{
+//         include:{
+//           user:true
+//         }
+//       }
+//     },
+//   });
+
+//   return reviews;
+// };
+
+// 🟢 1. Update the function to accept userId (it can be null if a guest is viewing!)
+const getReviewsByMediaId = async (mediaId: string, userId?: string | null) => {
   // 1. Verify the movie/series actually exists
   const isMediaExist = await prisma.media.findUnique({
     where: { id: mediaId },
   });
-
-  
-
-  
 
   if (!isMediaExist) {
     throw new AppError(status.NOT_FOUND, "Media not found.");
@@ -191,16 +239,13 @@ const getReviewsByMediaId = async (mediaId: string) => {
       createdAt: "desc", 
     },
     include: {
-      // Include the User who wrote it (we use 'select' so we don't accidentally leak their password/email)
       user: {
         select: {
           id: true,
-          // Assuming your user model has a name and photo, add them here:
-          // name: true, 
-          // profilePhoto: true 
+          name: true,
+          image: true 
         },
       },
-      // Include the tags
       tags: {
         include: {
           tag: true,
@@ -208,15 +253,32 @@ const getReviewsByMediaId = async (mediaId: string) => {
       },
       comments:{
         include:{
-          user:true
+          user: true
         }
-      }
+      },
+      // 🟢 2. ADD THIS: If we have a userId, check if they liked it. If not, ignore likes entirely.
+      likes: userId ? {
+        where: { userId: userId }
+      } : false
     },
   });
 
-  return reviews;
-};
+  // 🟢 3. MAP THE RESULTS: Transform the database array into a clean boolean
+  const formattedReviews = reviews.map((review) => {
+    // Check if the likes array exists and has at least one item
+    const isLiked = review.likes && review.likes.length > 0;
+    
+    // Separate the 'likes' array out so we don't send it to the frontend
+    const { likes, ...reviewData } = review as any; 
 
+    return {
+      ...reviewData,
+      isLikedByCurrentUser: isLiked // Attach our clean boolean!
+    };
+  });
+
+  return formattedReviews;
+};
 
 const updateReviewStatus = async(payload:any, reviewId:string) =>{
     const result = await prisma.review.update({
