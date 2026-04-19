@@ -218,6 +218,68 @@ const updateReview = async (reviewId: string, userId: string, payload: IUpdateRe
 // };
 
 // 🟢 1. Update the function to accept userId (it can be null if a guest is viewing!)
+// const getReviewsByMediaId = async (mediaId: string, userId?: string | null) => {
+//   // 1. Verify the movie/series actually exists
+//   const isMediaExist = await prisma.media.findUnique({
+//     where: { id: mediaId },
+//   });
+
+//   if (!isMediaExist) {
+//     throw new AppError(status.NOT_FOUND, "Media not found.");
+//   }
+
+//   // 2. Fetch the reviews
+//   const reviews = await prisma.review.findMany({
+//     where: {
+//       mediaId: mediaId,
+//       status: "PUBLISHED", // Security: Only fetch approved reviews!
+//     },
+//     // Sort by newest first
+//     orderBy: {
+//       createdAt: "desc", 
+//     },
+//     include: {
+//       user: {
+//         select: {
+//           id: true,
+//           name: true,
+//           image: true 
+//         },
+//       },
+//       tags: {
+//         include: {
+//           tag: true,
+//         },
+//       },
+//       comments:{
+//         include:{
+//           user: true
+//         }
+//       },
+//       // 🟢 2. ADD THIS: If we have a userId, check if they liked it. If not, ignore likes entirely.
+//       likes: userId ? {
+//         where: { userId: userId }
+//       } : false
+//     },
+//   });
+
+//   // 🟢 3. MAP THE RESULTS: Transform the database array into a clean boolean
+// const formattedReviews = reviews.map((review) => {
+//     // STRICT CHECK: If likes array exists and has items, true. Else, false.
+//     const isLiked = review.likes && review.likes.length > 0 ? true : false;
+    
+//     const { likes, ...reviewData } = review as any; 
+
+//     return {
+//       ...reviewData,
+//       isLikedByCurrentUser: isLiked 
+//     };
+//   });
+
+//   return formattedReviews;
+// };
+
+// 🟢 Update the function to accept userId (it can be null if a guest is viewing!)
 const getReviewsByMediaId = async (mediaId: string, userId?: string | null) => {
   // 1. Verify the movie/series actually exists
   const isMediaExist = await prisma.media.findUnique({
@@ -232,7 +294,12 @@ const getReviewsByMediaId = async (mediaId: string, userId?: string | null) => {
   const reviews = await prisma.review.findMany({
     where: {
       mediaId: mediaId,
-      status: "PUBLISHED", // Security: Only fetch approved reviews!
+      // 🟢 NEW: Use OR logic to fetch published reviews AND the user's own unpublished ones
+      OR: [
+        { status: "PUBLISHED" },
+        // If userId exists, fetch their pending reviews. If not, fallback to a fake ID so it safely ignores this.
+        { userId: userId || "UNAUTHENTICATED_GUEST" } 
+      ]
     },
     // Sort by newest first
     orderBy: {
@@ -256,7 +323,7 @@ const getReviewsByMediaId = async (mediaId: string, userId?: string | null) => {
           user: true
         }
       },
-      // 🟢 2. ADD THIS: If we have a userId, check if they liked it. If not, ignore likes entirely.
+      // If we have a userId, check if they liked it. If not, ignore likes entirely.
       likes: userId ? {
         where: { userId: userId }
       } : false
@@ -264,20 +331,25 @@ const getReviewsByMediaId = async (mediaId: string, userId?: string | null) => {
   });
 
   // 🟢 3. MAP THE RESULTS: Transform the database array into a clean boolean
-const formattedReviews = reviews.map((review) => {
+  const formattedReviews = reviews.map((review) => {
     // STRICT CHECK: If likes array exists and has items, true. Else, false.
     const isLiked = review.likes && review.likes.length > 0 ? true : false;
+    
+    // 🟢 NEW: Check if the current user is the author of this specific review
+    const isOwner = userId ? userId === review.userId : false;
     
     const { likes, ...reviewData } = review as any; 
 
     return {
       ...reviewData,
-      isLikedByCurrentUser: isLiked 
+      isLikedByCurrentUser: isLiked,
+      isOwner: isOwner // 👈 Send this to the frontend!
     };
   });
 
   return formattedReviews;
 };
+
 
 const updateReviewStatus = async(payload:any, reviewId:string) =>{
     const result = await prisma.review.update({
