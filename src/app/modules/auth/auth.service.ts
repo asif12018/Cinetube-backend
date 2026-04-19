@@ -41,6 +41,8 @@ const registerUser = async (payload: IRegisterUserPayload) => {
     throw new AppError(status.BAD_REQUEST, "Failed to register a user");
   }
 
+
+
   //  generate access token
   const accessToken = tokenUtils.getAccessToken({
     userId: data.user.id,
@@ -72,8 +74,15 @@ const registerUser = async (payload: IRegisterUserPayload) => {
   //   },
   // });
 
+
+  const getToken = await prisma.session.findFirst({
+    where:{
+      userId: data.user.id
+    }
+  })
+
   return {
-    token: data.token,
+    token: getToken?.token,
     accessToken,
     refreshToken,
     user: data.user,
