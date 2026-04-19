@@ -110,15 +110,15 @@ const updateReview = async (reviewId: string, userId: string, payload: IUpdateRe
     throw new AppError(status.NOT_FOUND, "Review not found.");
   }
 
-  // 2. Security Check: Is this user the actual author of the review?
+  // 2. Security Check: Is this user the actual author?
   if (existingReview.userId !== userId) {
     throw new AppError(status.FORBIDDEN, "You are not authorized to edit this review.");
   }
 
-  // 3. Business Logic Check: Is the review unpublished?
-  // According to your requirements, users cannot edit approved/published reviews!
-  if (existingReview.status !== "PENDING") {
-    throw new AppError(status.BAD_REQUEST, "You can only edit unpublished (pending) reviews.");
+  // 3. Business Logic Check: Block edits on PUBLISHED reviews only.
+  // This automatically allows both PENDING and UNPUBLISHED to pass through!
+  if (existingReview.status === "PUBLISHED") {
+    throw new AppError(status.BAD_REQUEST, "You cannot edit a published review.");
   }
 
   // 4. Execute the update inside a transaction
@@ -134,17 +134,20 @@ const updateReview = async (reviewId: string, userId: string, payload: IUpdateRe
       }
     }
 
-    // 5. Update the review and replace the tags
+    // 5. Update the review, replace the tags, AND reset status to PENDING
     const updatedReview = await tx.review.update({
       where: { id: reviewId },
       data: {
         ...updateData,
+        // 🟢 CRUCIAL: If they edit a rejected (UNPUBLISHED) review, send it back to the Admin for review!
+        status: "PENDING", 
+        
         // If the frontend sent a new array of tags, replace the old ones
         ...(tags && {
           tags: {
-            deleteMany: {}, // This safely removes the OLD tags connected to this review
+            deleteMany: {}, 
             create: tags.map((tagId) => ({
-              tagId: tagId,     // This connects the NEW tags
+              tagId: tagId,    
             })),
           },
         }),
