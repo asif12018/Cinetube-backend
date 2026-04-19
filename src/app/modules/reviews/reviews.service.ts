@@ -294,42 +294,64 @@ const getReviewsByMediaId = async (mediaId: string, userId?: string | null) => {
   }
 
   // 2. Fetch the reviews
+  // const reviews = await prisma.review.findMany({
+  //   where: {
+  //     mediaId: mediaId,
+  //     // 🟢 NEW: Use OR logic to fetch published reviews AND the user's own unpublished ones
+  //     OR: [
+  //       { status: "PUBLISHED" },
+  //       // If userId exists, fetch their pending reviews. If not, fallback to a fake ID so it safely ignores this.
+  //       { userId: userId || "UNAUTHENTICATED_GUEST" } 
+  //     ]
+  //   },
+  //   // Sort by newest first
+  //   orderBy: {
+  //     createdAt: "desc", 
+  //   },
+  //   include: {
+  //     user: {
+  //       select: {
+  //         id: true,
+  //         name: true,
+  //         image: true 
+  //       },
+  //     },
+  //     tags: {
+  //       include: {
+  //         tag: true,
+  //       },
+  //     },
+  //     comments:{
+  //       include:{
+  //         user: true
+  //       }
+  //     },
+  //     // If we have a userId, check if they liked it. If not, ignore likes entirely.
+  //     likes: userId ? {
+  //       where: { userId: userId }
+  //     } : false
+  //   },
+  // });
+
   const reviews = await prisma.review.findMany({
     where: {
       mediaId: mediaId,
-      // 🟢 NEW: Use OR logic to fetch published reviews AND the user's own unpublished ones
       OR: [
         { status: "PUBLISHED" },
-        // If userId exists, fetch their pending reviews. If not, fallback to a fake ID so it safely ignores this.
         { userId: userId || "UNAUTHENTICATED_GUEST" } 
       ]
     },
-    // Sort by newest first
-    orderBy: {
-      createdAt: "desc", 
-    },
+    orderBy: { createdAt: "desc" },
     include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-          image: true 
-        },
-      },
-      tags: {
-        include: {
-          tag: true,
-        },
-      },
-      comments:{
-        include:{
-          user: true
-        }
-      },
-      // If we have a userId, check if they liked it. If not, ignore likes entirely.
-      likes: userId ? {
-        where: { userId: userId }
-      } : false
+      user: { select: { id: true, name: true, image: true } },
+      tags: { include: { tag: true } },
+      comments: { include: { user: true } },
+      likes: userId ? { where: { userId: userId } } : false,
+      
+      // 🟢 ADD THIS RIGHT HERE! This tells Prisma to return the total number of likes.
+      _count: {
+        select: { likes: true }
+      }
     },
   });
 
