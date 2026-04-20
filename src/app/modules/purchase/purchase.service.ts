@@ -634,7 +634,9 @@ const getSubscriptionInfo = async (userId: string) => {
     );
   }
 
-  return true; // Or return the 'subscription' object
+  // 🟢 THE FIX: Return the full subscription object!
+  // Now your frontend will receive cancelAtPeriodEnd and currentPeriodEnd
+  return subscription; 
 };
 
 export const PaymentService = {
