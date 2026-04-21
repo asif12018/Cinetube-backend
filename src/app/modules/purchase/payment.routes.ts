@@ -24,7 +24,7 @@ router.post(
 router.post(
     "/cancel-subscription", 
     express.json(), 
-    checkAuth(Role.USER), 
+    checkAuth(Role.USER, Role.ADMIN, Role.SUPER_ADMIN), 
     PaymentController.cancelSubscription
 );
 
