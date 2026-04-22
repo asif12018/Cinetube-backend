@@ -127,6 +127,12 @@ const isUserHasReview = catchAsync(async(req:Request, res:Response)=>{
 const deleteReview = catchAsync(async(req:Request, res:Response)=>{
     const reviewId = req.params.id;
     const result = await ReviewService.deleteReview(reviewId as string)
+      sendResponse(res,{
+        httpStatusCode: status.OK,
+        success: true,
+        message:"Admin has deleted the review",
+        data: result
+    })
 })
 
 
