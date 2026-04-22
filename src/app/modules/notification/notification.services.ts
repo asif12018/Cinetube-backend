@@ -14,29 +14,19 @@ import { prisma } from "../../lib/prisma"
 
 
 const readNotification = async(userId: string) =>{
-    const isNotificationExist = await prisma.notification.findFirst({
+    const result = await prisma.notification.updateMany({
         where:{
-            userId:userId
+            userId: userId,
+            isRead: false
+        },
+        data:{
+            isRead: true
         }
     });
 
-    if(!isNotificationExist){
-        throw new AppError(status.NOT_FOUND, "User not have any notification");
+    if (result.count === 0) {
+        throw new AppError(status.BAD_REQUEST, "No unread notifications found");
     }
-
-    if(isNotificationExist.isRead === true){
-        throw new AppError(status.BAD_REQUEST,"Notification already mark as read")
-    }
-
-    await prisma.notification.update({
-        where:{
-            id:isNotificationExist.id,
-            userId: userId
-        },
-        data:{
-            isRead:true
-        }
-    })
 }
 
 
