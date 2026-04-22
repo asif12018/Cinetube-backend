@@ -122,6 +122,14 @@ const isUserHasReview = catchAsync(async(req:Request, res:Response)=>{
 })
 
 
+//delete review
+
+const deleteReview = catchAsync(async(req:Request, res:Response)=>{
+    const reviewId = req.params.id;
+    const result = await ReviewService.deleteReview(reviewId as string)
+})
+
+
 
 export const ReviewController = {
     createReview,
@@ -129,7 +137,8 @@ export const ReviewController = {
     updateReviewStatus,
     getUnPublishedReview,
     getReviewByMedia,
-    isUserHasReview
+    isUserHasReview,
+    deleteReview
 }
 
 

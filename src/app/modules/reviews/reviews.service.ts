@@ -452,6 +452,31 @@ const isUserHasReview = async(mediaId:string, userId:string) =>{
 }
 
 
+const deleteReview = async(reviewId:string) =>{
+  const isReviewExsit = await prisma.review.findFirst({
+    where:{
+      id:reviewId
+    }
+  });
+
+  if(!isReviewExsit){
+    throw new AppError(status.NOT_FOUND, "Review not found");
+  }
+
+  const deleteReview = await prisma.review.delete({
+    where:{
+      id:isReviewExsit.id
+    }
+  })
+
+  await updateMediaAggregateStats(deleteReview.mediaId)
+
+  return deleteReview;
+
+
+}
+
+
 
 
 
@@ -463,5 +488,6 @@ export const ReviewService = {
     getReviewsByMediaId,
     updateReviewStatus,
     getUnPublishedReview,
-    isUserHasReview
+    isUserHasReview,
+    deleteReview 
 }
