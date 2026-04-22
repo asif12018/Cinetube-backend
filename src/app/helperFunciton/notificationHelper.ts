@@ -13,7 +13,7 @@ export const notifiedByAdmin = async(userId:string, content: string, mediaId:str
             userId,
             title: `Notification from admin`,
             body:`Your review has been ${content}`,
-            link:"/"
+            link:`movie/${mediaId}`
         }
     })
 }
