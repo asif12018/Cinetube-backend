@@ -101,7 +101,7 @@ STRIPE_WEBHOOK_SECRET=<your_webhook_secret>
 ### 1. Clone & Install
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/asif12018/Cinetube-backend.git
 cd CineHub-backend-main
 npm install
 ```
