@@ -481,6 +481,14 @@ const getPublishedReview = async()=>{
   const result = await prisma.review.findMany({
     where:{
       status:"PUBLISHED"
+    },
+    include:{
+      user:true,
+      tags:{
+        include:{
+          tag:true
+        }
+      }
     }
   });
 
