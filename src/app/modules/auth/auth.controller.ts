@@ -248,6 +248,37 @@ const getMeAuth = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+
+
+//google signin controller
+const googleSuccess = catchAsync(async (req: Request, res: Response) => {
+  const sessionToken = req.cookies["better-auth.session_token"];
+  const session = await auth.api.getSession({
+    headers: new Headers({ Authorization: `Bearer ${sessionToken}` }),
+  });
+
+  if (!session) throw new AppError(status.UNAUTHORIZED, "No session");
+
+  const accessToken = tokenUtils.getAccessToken({
+    userId: session.user.id,
+    role: session.user.role,
+    name: session.user.name,
+    email: session.user.email,
+  });
+  const refreshToken = tokenUtils.getRefreshToken({
+    userId: session.user.id,
+    role: session.user.role,
+    name: session.user.name,
+    email: session.user.email,
+  });
+
+  const FRONTEND_URL = config.FRONTEND_URL || "http://localhost:3000";
+  res.redirect(
+    `${FRONTEND_URL}/api/auth/callback/google?accessToken=${accessToken}&refreshToken=${refreshToken}&token=${sessionToken}&role=${session.user.role}`
+  );
+});
+
+
 export const AuthController = {
   registerUser,
   logInUser,
@@ -260,5 +291,6 @@ export const AuthController = {
   logOutUser,
   resendOTP,
   getMeAuth,
-  resendOTPForgetPassword 
+  resendOTPForgetPassword,
+  googleSuccess
 };

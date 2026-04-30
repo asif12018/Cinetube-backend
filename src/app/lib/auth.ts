@@ -28,6 +28,7 @@ export const auth = betterAuth({
           gender: "MALE",
         };
       },
+      
     },
   },
 
@@ -166,4 +167,8 @@ export const auth = betterAuth({
       },
     },
   },
+  redirectURLs: {
+  signIn: `${config.BETTER_AUTH_URL}/api/v1/auth/google/success`
+}
+
 });
