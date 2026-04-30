@@ -18,23 +18,18 @@ export const auth = betterAuth({
     requireEmailVerification: true,
   },
   //social provider || login with social media
-  //   socialProviders:{
-  //     google:{
-  //       clientId: envVars.GOOGLE_CLIENT_ID,
-  //       clientSecret: envVars.GOOGLE_CLIENT_SECRET,
-  //       // callbackURL: envVars.GOOGLE_CALLBACK_URL,
-  //       mapProfileToUser: () =>{
-  //         return {
-  //           role: Role.PATIENT,
-  //           status: UserStatus.ACTIVE,
-  //           needPasswordChange: false,
-  //           emailVerified: true,
-  //           isDeleted: false,
-  //           deletedAt: null
-  //         }
-  //       }
-  //     }
-  //   },
+  socialProviders: {
+    google: {
+      clientId: config.GOOGLE_CLIENT_ID as string,
+      clientSecret: config.GOOGLE_CLIENT_SECRET as string,
+      mapProfileToUser: () => {
+        return {
+          role: "USER",
+          gender: "MALE",
+        };
+      },
+    },
+  },
 
   // email verificaiton
   emailVerification: {
