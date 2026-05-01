@@ -98,12 +98,6 @@ app.get("/api/v1/auth/login/google", AuthController.googleLogin);
 app.get("/api/v1/auth/google/success", AuthController.googleLoginSuccess);
 app.get("/api/v1/auth/oauth/error", AuthController.handleOAuthError);
 
-// Better Auth handles everything else under /api/v1/auth
-app.use("/api/v1/auth", toNodeHandler(auth));
-
-// ✅ To this (Order matters! Put this BEFORE IndexRoutes):
-// app.use("/api/v1/auth", toNodeHandler(auth));
-
 app.use('/api/v1/payment/stripe/webhook', 
   express.raw({ type: 'application/json' })
 );
@@ -118,8 +112,8 @@ app.use(express.urlencoded({ extended: true }));
 // 5. ALL OTHER ROUTES
 app.use("/api/v1", IndexRoutes);
 
-//remove if not work
-// app.use("/api/v1/auth", toNodeHandler(auth));
+// Better Auth handles everything else under /api/v1/auth (catch-all for auth)
+app.use("/api/v1/auth", toNodeHandler(auth));
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello from Apollo Gears World!");
