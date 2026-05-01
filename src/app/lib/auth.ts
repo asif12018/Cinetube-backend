@@ -28,7 +28,6 @@ export const auth = betterAuth({
           gender: "MALE",
         };
       },
-      
     },
   },
 
@@ -80,21 +79,25 @@ export const auth = betterAuth({
             },
           });
 
-          if(!user){
+          if (!user) {
             console.error("User not found for email: ", email);
             return;
           }
-          if(user && user.role === "ADMIN"){
-               console.log(`User with this email ${email} is admin, so not sending email`);
-               return;
+          if (user && user.role === "ADMIN") {
+            console.log(
+              `User with this email ${email} is admin, so not sending email`,
+            );
+            return;
           }
           //checking is it the first super admin on server
           // const isItFirstSuperAdmin = await prisma.admin.count() === 1;
           //checking if the user exist and not verified
-          if (user && !user.emailVerified
+          if (
+            user &&
+            !user.emailVerified
             //  || isItFirstSuperAdmin
-          // || user?.role !== Role.SUPER_ADMIN
-            ) {
+            // || user?.role !== Role.SUPER_ADMIN
+          ) {
             await sendEmail({
               to: email,
               subject: "Verify Your email",
@@ -105,30 +108,28 @@ export const auth = betterAuth({
               },
             });
           }
-        }else if(type ==="forget-password"){
-               const user = await prisma.user.findFirst({
-                where:{
-                  email
-                }
-               });
-               if(user){
-                await sendEmail({
-                  to:email,
-                  subject: "Password Reset OTP",
-                  templateName: "otp",
-                  templateData:{
-                    name: user.name,
-                    otp
-                  }
-                });
-               }
+        } else if (type === "forget-password") {
+          const user = await prisma.user.findFirst({
+            where: {
+              email,
+            },
+          });
+          if (user) {
+            await sendEmail({
+              to: email,
+              subject: "Password Reset OTP",
+              templateName: "otp",
+              templateData: {
+                name: user.name,
+                otp,
+              },
+            });
           }
+        }
       },
       expiresIn: 2 * 60, // valid for 2mins
       otpLength: 6, // otp will be 6 digits long
-
     }),
-
   ],
   session: {
     expiresIn: 60 * 60 * 60 * 24, // 1day in seconds
@@ -144,7 +145,7 @@ export const auth = betterAuth({
   trustedOrigins: [
     process.env.BETTER_AUTH_URL || "http://localhost:5000",
     process.env.FRONTEND_URL || "http://localhost:3000",
-    "http://localhost:3000"
+    "http://localhost:3000",
   ],
   advanced: {
     // disableCSRFCheck: true
@@ -169,8 +170,7 @@ export const auth = betterAuth({
       },
     },
   },
-  redirectURLs: {
-  signIn: `${config.BETTER_AUTH_URL}/api/v1/auth/google/success`
-}
-
+  // redirectURLs: {
+  //   signIn: `${config.BETTER_AUTH_URL}/api/v1/auth/google/success`,
+  // },
 });
