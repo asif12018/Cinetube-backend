@@ -261,15 +261,25 @@ const googleLogin = catchAsync(async (req: Request, res: Response) => {
     const redirectPath = (req.query.redirect as string) || "/dashboard";
     const callbackURL = `${config.BETTER_AUTH_URL}/api/v1/auth/google/success?redirect=${encodeURIComponent(redirectPath)}`;
 
+    // Call Better Auth and request a standard Web Response
     const result = await auth.api.signInSocial({
         body: {
             provider: "google",
             callbackURL,
         },
-    });
+        asResponse: true,
+    }) as Response;
 
-    if (result?.url) {
-        return res.redirect(result.url);
+    // Transfer the Set-Cookie headers (this contains the state cookie)
+    const cookies = result.headers.getSetCookie();
+    if (cookies && cookies.length > 0) {
+        res.setHeader("Set-Cookie", cookies);
+    }
+
+    // Parse the JSON body to get the Google OAuth URL
+    const data = await result.json();
+    if (data?.url) {
+        return res.redirect(data.url);
     }
 
     res.redirect(`${config.FRONTEND_URL}/login?error=oauth_init_failed`);
