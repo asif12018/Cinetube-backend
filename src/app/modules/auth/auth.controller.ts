@@ -268,7 +268,7 @@ const googleLogin = catchAsync(async (req: Request, res: Response) => {
             callbackURL,
         },
         asResponse: true,
-    }) as Response;
+    }) as globalThis.Response;
 
     // Transfer the Set-Cookie headers (this contains the state cookie)
     const cookies = result.headers.getSetCookie();
