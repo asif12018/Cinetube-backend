@@ -26,6 +26,8 @@ router.post("/logout", checkAuth(Role.USER, Role.ADMIN, Role.SUPER_ADMIN), AuthC
 router.post("/resend-otp", AuthController.resendOTP);
 router.post("/otp-forget-password", AuthController.resendOTPForgetPassword)
 router.get("/authUser", checkAuth(Role.ADMIN, Role.SUPER_ADMIN, Role.USER), AuthController.getMeAuth);
-router.get("/google/success", AuthController.googleSuccess);
+router.get("/login/google", AuthController.googleLogin);
+router.get("/google/success", AuthController.googleLoginSuccess);
+router.get("/oauth/error", AuthController.handleOAuthError);
 
 export const AuthRoutes = router;

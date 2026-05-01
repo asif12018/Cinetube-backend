@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connecting to CineTube...</title>
+    <style>
+      /* --- Variables & Core Styles --- */
+      :root {
+        --primary-red: #E50914; /* Signature streaming red */
+        --bg-color: #141414; /* Dark cinematic background */
+        --text-main: #FFFFFF;
+        --text-muted: #B3B3B3;
+      }
+
+      body {
+        margin: 0;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        background-color: var(--bg-color);
+        /* Subtle radial gradient for depth */
+        background-image: radial-gradient(circle at center, #232323 0%, #141414 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        color: var(--text-main);
+        overflow: hidden;
+      }
+
+      /* --- Cinematic Container --- */
+      .cinetube-container {
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+        padding: 40px;
+        /* Smooth cinematic fade in */
+        animation: cinematicFadeIn 1s ease-out forwards;
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      /* --- Branding / Typography --- */
+      .brand-logo {
+        font-size: 2.2rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        color: var(--primary-red);
+        margin-bottom: 40px;
+        text-transform: uppercase;
+      }
+
+      .status-title {
+        font-size: 1.4rem;
+        font-weight: 500;
+        margin: 0 0 12px 0;
+        letter-spacing: 0.5px;
+      }
+
+      .status-subtitle {
+        font-size: 1rem;
+        color: var(--text-muted);
+        margin: 0;
+        line-height: 1.5;
+      }
+
+      /* =========================================
+         THE "STREAMING" LOADER SPINNER
+         ========================================= */
+      .loader-container {
+        height: 70px;
+        margin: 0 auto 30px auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .streaming-spinner {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        /* Faded red track */
+        border: 4px solid rgba(229, 9, 20, 0.2);
+        /* Solid red spinning arc */
+        border-top-color: var(--primary-red);
+        animation: spin 1s cubic-bezier(0.5, 0.1, 0.4, 0.9) infinite;
+      }
+
+      /* --- Error State --- */
+      .error-icon-svg {
+        display: none; /* Hidden by default */
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 30px auto;
+        color: var(--primary-red);
+      }
+
+      /* When JS detects error, this class hides spinner & shows error icon */
+      .is-error .loader-container {
+        display: none;
+      }
+      .is-error .error-icon-svg {
+        display: block;
+      }
+
+      /* =========================================
+         KEYFRAME ANIMATIONS
+         ========================================= */
+      
+      @keyframes cinematicFadeIn {
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes spin {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cinetube-container" id="redirect-card">
+      
+      <!-- CineTube Logo/Text -->
+      <div class="brand-logo">CineTube</div>
+      
+      <!-- Premium Spinner -->
+      <div class="loader-container">
+        <div class="streaming-spinner"></div>
+      </div>
+
+      <!-- Error Icon (Hidden by default) -->
+      <svg class="error-icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+
+      <h1 class="status-title" id="main-status-text">Authenticating...</h1>
+      <p class="status-subtitle" id="sub-status-text">Connecting securely to your account via Google.</p>
+    </div>
+
+    <script>
+      const cardContainer = document.getElementById('redirect-card');
+      const mainText = document.getElementById('main-status-text');
+      const subText = document.getElementById('sub-status-text');
+
+      // Helper function to handle errors gracefully
+      function handleError(errorMessage) {
+        cardContainer.classList.add('is-error');
+        mainText.textContent = "Connection Failed";
+        subText.textContent = errorMessage;
+      }
+
+      (async () => {
+        try {
+          const response = await fetch(
+            `<%= betterAuthUrl %>/api/auth/sign-in/social`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+              body: JSON.stringify({
+                provider: "google",
+                callbackURL: `<%= callbackURL %>`,
+              }),
+            }
+          );
+
+          // Attempt to parse response as JSON
+          let data;
+          try {
+             data = await response.json();
+          } catch(e) {
+             throw new Error("Invalid response from server.");
+          }
+          
+          if (response.ok && data.url) {
+            // Success! Update text just before jump to match streaming vibe
+            mainText.textContent = "Preparing your stream...";
+            subText.textContent = "Redirecting you to Google.";
+            
+            // Tiny delay to let the user see the success text
+            setTimeout(() => {
+                window.location.href = data.url;
+            }, 400);
+            
+          } else {
+            handleError("Unable to verify credentials. Please try again later.");
+          }
+        } catch (err) {
+          handleError(`Network issue: ${err.message}`);
+        }
+      })();
+    </script>
+  </body>
+</html>

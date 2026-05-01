@@ -8,7 +8,6 @@ import config from "../config";
 
 export const auth = betterAuth({
   baseURL: config.BETTER_AUTH_URL,
-  basePath: "/api/v1/auth",
   secret: config.BETTER_AUTH_SECRET,
   database: prismaAdapter(prisma, {
     provider: "postgresql", // or "mysql", "postgresql", ...etc
@@ -26,6 +25,7 @@ export const auth = betterAuth({
         return {
           role: "USER",
           gender: "MALE",
+          emailVerified:true,
         };
       },
     },
@@ -139,9 +139,10 @@ export const auth = betterAuth({
       maxAge: 60 * 60 * 60 * 24, // 1day in seconds
     },
   },
-  // redirectURLs:{
-  //   signIn: `${process.env.BETTER_AUTH_URL}/api/v1/auth/google/success`
-  // },
+  
+  redirectURLs:{
+    signIn: `${process.env.BETTER_AUTH_URL}/api/v1/auth/google/success`
+  },
   trustedOrigins: [
     process.env.BETTER_AUTH_URL || "http://localhost:5000",
     process.env.FRONTEND_URL || "http://localhost:3000",
@@ -150,7 +151,7 @@ export const auth = betterAuth({
   advanced: {
     // disableCSRFCheck: true
     //change it if not work
-    useSecureCookies: true,
+    useSecureCookies: false,
     cookies: {
       state: {
         attributes: {

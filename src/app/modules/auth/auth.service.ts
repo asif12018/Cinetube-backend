@@ -430,6 +430,46 @@ const getMeAuth = async (user: IRequestUser) => {
   return isUserExist;
 };
 
+const googleLoginSuccess = async (session: Record<string, any>) => {
+    // 1. Search by email (this is the safest way to link Google accounts)
+    let user = await prisma.user.findUnique({
+        where: {
+            email: session.user.email, 
+        }
+    });
+
+    if (!user) {
+        // 2. Create the user using only the fields that exist in your schema
+        user = await prisma.user.create({
+            data: {
+                // We let Prisma generate the `id` automatically via uuid()
+                name: session.user.name,
+                email: session.user.email,
+                role: session.user.role || "USER",
+                image: session.user.image || null, // Since your schema supports it!
+            }
+        });
+    }
+
+    // 3. Generate your custom JWTs using the verified `user.id`
+    const accessToken = tokenUtils.getAccessToken({
+        userId: user.id, // Use the ID from the database record!
+        role: user.role,
+        name: user.name,
+    });
+
+    const refreshToken = tokenUtils.getRefreshToken({
+        userId: user.id,
+        role: user.role,
+        name: user.name,
+    });
+
+    return {
+        accessToken,
+        refreshToken,
+    };
+}
+
 export const AuthServices = {
   registerUser,
   logInUser,
@@ -442,5 +482,6 @@ export const AuthServices = {
   logOutUser,
   resendOTP,
   getMeAuth,
-  resendOTPForgetPassword
+  resendOTPForgetPassword,
+  googleLoginSuccess
 };
