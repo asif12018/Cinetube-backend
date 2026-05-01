@@ -6,6 +6,8 @@ import { bearer, emailOTP, role } from "better-auth/plugins";
 import config from "../config";
 // If your Prisma file is located elsewhere, you can change the path
 
+
+
 export const auth = betterAuth({
   baseURL: config.BETTER_AUTH_URL,
   basePath: "/api/v1/auth",
