@@ -58,6 +58,7 @@ import { IndexRoutes } from "./app/routes";
 import { globalErrorHandler } from "./app/middlewares/globalErrorhandler";
 import { notFount } from "./app/middlewares/notFountRoutes";
 import { PaymentRoutes } from "./app/modules/purchase/payment.routes";
+import path from "path"; // 🚨 This is the missing piece
 
 const app: Application = express();
 
