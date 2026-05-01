@@ -6,6 +6,8 @@ import status from "http-status";
 import { CookieUtils } from "../../utils/cookie";
 import { tokenUtils } from "../../utils/token";
 import AppError from "../../../errorHelpers/AppError";
+import config from "../../config";
+import { auth } from "../../lib/auth";
 
 //register a user
 const registerUser = catchAsync(async (req: Request, res: Response) => {
