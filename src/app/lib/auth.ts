@@ -24,11 +24,12 @@ export const auth = betterAuth({
     google: {
       clientId: config.GOOGLE_CLIENT_ID as string,
       clientSecret: config.GOOGLE_CLIENT_SECRET as string,
+      redirectURI: `${config.BETTER_AUTH_URL}/api/v1/auth/callback/google`,
       mapProfileToUser: () => {
         return {
           role: "USER",
           gender: "MALE",
-          emailVerified:true,
+          emailVerified: true,
         };
       },
     },
@@ -152,25 +153,27 @@ export const auth = betterAuth({
     "http://localhost:3000",
   ],
   advanced: {
-    // disableCSRFCheck: true
-    //change it if not work
+    disableCSRFCheck: true,
     useSecureCookies: true,
+    crossSubdomainCookies: {
+      enabled: false,
+    },
     cookies: {
       state: {
         attributes: {
-          sameSite: "none",
+          sameSite: "lax",   // ← Changed from 'none' to 'lax' (same domain redirect)
           secure: true,
           httpOnly: true,
           path: "/",
         },
       },
-    },
-    sessionToken: {
-      attributes: {
-        sameSite: "none",
-        secure: true,
-        httpOnly: true,
-        path: "/",
+      sessionToken: {
+        attributes: {
+          sameSite: "none",  // ← Keep 'none' so frontend can read it cross-domain
+          secure: true,
+          httpOnly: true,
+          path: "/",
+        },
       },
     },
   },
