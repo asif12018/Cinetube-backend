@@ -315,6 +315,9 @@ const googleLoginSuccess = catchAsync(async (req: Request, res: Response) => {
     const callbackUrl = new URL(`${config.FRONTEND_URL}/api/auth/callback/google`);
     callbackUrl.searchParams.set("accessToken", accessToken);
     callbackUrl.searchParams.set("refreshToken", refreshToken);
+    if (session.session?.token) {
+        callbackUrl.searchParams.set("token", session.session.token);
+    }
     callbackUrl.searchParams.set("redirect", finalRedirectPath);
     if (session.user?.role) {
         callbackUrl.searchParams.set("role", session.user.role);
