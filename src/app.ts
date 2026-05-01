@@ -77,7 +77,8 @@ app.use(cors({
 app.use(cookieParser()); // Required for Better-Auth
 
 // 2. AUTHENTICATION
-app.use("/api/auth", toNodeHandler(auth));
+// app.use("/api/auth", toNodeHandler(auth));
+app.use("/api/v1/auth", toNodeHandler(auth));
 
 // ✅ To this (Order matters! Put this BEFORE IndexRoutes):
 // app.use("/api/v1/auth", toNodeHandler(auth));

@@ -143,9 +143,9 @@ export const auth = betterAuth({
     },
   },
   
-  redirectURLs:{
-    signIn: `${process.env.BETTER_AUTH_URL}/api/v1/auth/google/success`
-  },
+  // redirectURLs:{
+  //   signIn: `${process.env.BETTER_AUTH_URL}/api/v1/auth/google/success`
+  // },
   trustedOrigins: [
     process.env.BETTER_AUTH_URL || "http://localhost:5000",
     process.env.FRONTEND_URL || "http://localhost:3000",
@@ -154,7 +154,7 @@ export const auth = betterAuth({
   advanced: {
     // disableCSRFCheck: true
     //change it if not work
-    useSecureCookies: false,
+    useSecureCookies: true,
     cookies: {
       state: {
         attributes: {
