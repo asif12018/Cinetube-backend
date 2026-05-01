@@ -274,7 +274,7 @@ const googleSuccess = catchAsync(async (req: Request, res: Response) => {
     email: session.user.email,
   });
 
-  const FRONTEND_URL = config.FRONTEND_URL || "http://localhost:3000";
+  const FRONTEND_URL = config.FRONTEND_URL;
   res.redirect(
     `${FRONTEND_URL}/api/auth/callback/google?accessToken=${accessToken}&refreshToken=${refreshToken}&token=${sessionToken}&role=${session.user.role}`
   );
