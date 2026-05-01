@@ -289,8 +289,7 @@ const googleLogin = catchAsync(async (req: Request, res: Response) => {
 const googleLoginSuccess = catchAsync(async (req: Request, res: Response) => {
     const redirectPath = (req.query.redirect as string) || "/dashboard";
 
-    // Pass the raw headers to Better Auth so it finds the secure cookie
-    // (In production with useSecureCookies: true, the name is __Secure-better-auth.session_token)
+    // Pass the raw headers to Better Auth so it finds the state/session cookie
     const session = await auth.api.getSession({
         headers: new Headers(req.headers as any),
     });
@@ -299,23 +298,29 @@ const googleLoginSuccess = catchAsync(async (req: Request, res: Response) => {
         return res.redirect(`${config.FRONTEND_URL}/login?error=no_session_found`);
     }
 
-
-    if(session && !session.user){
+    if (session && !session.user) {
         return res.redirect(`${config.FRONTEND_URL}/login?error=no_user_found`);
     }
 
     const result = await AuthServices.googleLoginSuccess(session);
+    const { accessToken, refreshToken } = result;
 
-    const {accessToken, refreshToken} = result;
-    const sessionToken = req.cookies['better-auth.session_token'] || req.cookies['__Secure-better-auth.session_token'] || '';
-
-    tokenUtils.setAccessTokenCookie(res, accessToken);
-    tokenUtils.setRefreshTokenCookie(res, refreshToken);
- // ?redirect=//profile -> /profile
+    // Validate redirect path to prevent open redirect attacks
     const isValidRedirectPath = redirectPath.startsWith("/") && !redirectPath.startsWith("//");
     const finalRedirectPath = isValidRedirectPath ? redirectPath : "/dashboard";
 
-    res.redirect(`${config.FRONTEND_URL}${finalRedirectPath}`);
+    // ✅ KEY FIX: Do NOT set cookies on the backend domain — they won't be readable
+    // by the frontend (different domain). Instead, pass tokens as query params to
+    // the frontend's callback route, which will set them as frontend-domain cookies.
+    const callbackUrl = new URL(`${config.FRONTEND_URL}/api/auth/callback/google`);
+    callbackUrl.searchParams.set("accessToken", accessToken);
+    callbackUrl.searchParams.set("refreshToken", refreshToken);
+    callbackUrl.searchParams.set("redirect", finalRedirectPath);
+    if (session.user?.role) {
+        callbackUrl.searchParams.set("role", session.user.role);
+    }
+
+    res.redirect(callbackUrl.toString());
 })
 
 //handle oauth error
