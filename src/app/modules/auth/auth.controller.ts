@@ -287,19 +287,13 @@ const googleLogin = catchAsync(async (req: Request, res: Response) => {
 
 
 const googleLoginSuccess = catchAsync(async (req: Request, res: Response) => {
-    const redirectPath = req.query.redirect as string || "/dashboard";
+    const redirectPath = (req.query.redirect as string) || "/dashboard";
 
-    const sessionToken = req.cookies["better-auth.session_token"];
-
-    if(!sessionToken){
-        return res.redirect(`${config.FRONTEND_URL}/login?error=oauth_failed`);
-    }
-
+    // Pass the raw headers to Better Auth so it finds the secure cookie
+    // (In production with useSecureCookies: true, the name is __Secure-better-auth.session_token)
     const session = await auth.api.getSession({
-        headers:{
-            "Cookie" : `better-auth.session_token=${sessionToken}`
-        }
-    })
+        headers: new Headers(req.headers as any),
+    });
 
     if (!session) {
         return res.redirect(`${config.FRONTEND_URL}/login?error=no_session_found`);
