@@ -307,6 +307,7 @@ const googleLoginSuccess = catchAsync(async (req: Request, res: Response) => {
     const result = await AuthServices.googleLoginSuccess(session);
 
     const {accessToken, refreshToken} = result;
+    const sessionToken = req.cookies['better-auth.session_token'] || req.cookies['__Secure-better-auth.session_token'] || '';
 
     tokenUtils.setAccessTokenCookie(res, accessToken);
     tokenUtils.setRefreshTokenCookie(res, refreshToken);
