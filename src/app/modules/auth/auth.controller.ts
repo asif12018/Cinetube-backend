@@ -254,25 +254,25 @@ const getMeAuth = catchAsync(async (req: Request, res: Response) => {
 
 
 //google signin controller
-// Redirects directly to Better Auth's built-in OAuth initiation endpoint.
-// This is critical: the state cookie must be set by Better Auth in the SAME
-// response that redirects to Google — any intermediate render/redirect breaks it.
-const googleLogin = catchAsync((req: Request, res: Response) => {
+// Calls Better Auth's API server-side to get the Google OAuth URL,
+// then redirects the browser there. This ensures the state cookie is
+// set correctly in the same response that starts the OAuth flow.
+const googleLogin = catchAsync(async (req: Request, res: Response) => {
     const redirectPath = (req.query.redirect as string) || "/dashboard";
-    const encodedRedirectPath = encodeURIComponent(redirectPath);
+    const callbackURL = `${config.BETTER_AUTH_URL}/api/v1/auth/google/success?redirect=${encodeURIComponent(redirectPath)}`;
 
-    // After Google callback, Better Auth will redirect here
-    const callbackURL = `${config.BETTER_AUTH_URL}/api/v1/auth/callback/google`;
+    const result = await auth.api.signInSocial({
+        body: {
+            provider: "google",
+            callbackURL,
+        },
+    });
 
-    // Better Auth's built-in social sign-in initiation URL
-    const googleAuthURL = `${config.BETTER_AUTH_URL}/api/v1/auth/sign-in/social`;
+    if (result?.url) {
+        return res.redirect(result.url);
+    }
 
-    // We POST to Better Auth's sign-in/social endpoint by redirecting
-    // Actually, Better Auth exposes a GET redirect for OAuth — use the correct path:
-    const initiateURL = new URL(`${config.BETTER_AUTH_URL}/api/v1/auth/sign-in/social`);
-    
-    // Redirect user to Better Auth's Google initiation (it handles state + redirect to Google)
-    res.redirect(`${config.BETTER_AUTH_URL}/api/v1/auth/sign-in/social?provider=google&callbackURL=${encodeURIComponent(`${config.BETTER_AUTH_URL}/api/v1/auth/google/success?redirect=${encodedRedirectPath}`)}`);
+    res.redirect(`${config.FRONTEND_URL}/login?error=oauth_init_failed`);
 });
 
 

@@ -58,7 +58,8 @@ import { IndexRoutes } from "./app/routes";
 import { globalErrorHandler } from "./app/middlewares/globalErrorhandler";
 import { notFount } from "./app/middlewares/notFountRoutes";
 import { PaymentRoutes } from "./app/modules/purchase/payment.routes";
-import path from "path"; // 🚨 This is the missing piece
+import { AuthController } from "./app/modules/auth/auth.controller";
+import path from "path";
 
 const app: Application = express();
 
@@ -92,7 +93,12 @@ app.use(cors(corsOptions));
 app.use(cookieParser()); // Required for Better-Auth
 
 // 2. AUTHENTICATION
-// app.use("/api/auth", toNodeHandler(auth));
+// ⚠️ Register custom Google routes FIRST (before toNodeHandler catch-all)
+app.get("/api/v1/auth/login/google", AuthController.googleLogin);
+app.get("/api/v1/auth/google/success", AuthController.googleLoginSuccess);
+app.get("/api/v1/auth/oauth/error", AuthController.handleOAuthError);
+
+// Better Auth handles everything else under /api/v1/auth
 app.use("/api/v1/auth", toNodeHandler(auth));
 
 // ✅ To this (Order matters! Put this BEFORE IndexRoutes):
