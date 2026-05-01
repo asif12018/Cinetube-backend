@@ -63,7 +63,7 @@ const app: Application = express();
 
 // 🚨 1. SETUP EJS VIEW ENGINE (REQUIRED FOR CINETUBE TEMPLATE)
 app.set("view engine", "ejs");
-app.set("views", path.join(process.cwd(), "src/app/templates")); // Adjust path if your templates folder is elsewhere
+app.set("views", path.resolve(process.cwd(), `src/app/templates`)); // Adjust path if your templates folder is elsewhere
 
 
 // 1. GLOBALS (Must be at the very top)
