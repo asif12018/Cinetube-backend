@@ -148,7 +148,8 @@ export const auth = betterAuth({
   ],
   advanced: {
     // disableCSRFCheck: true
-    useSecureCookies: false,
+    //change it if not work
+    useSecureCookies: true,
     cookies: {
       state: {
         attributes: {
