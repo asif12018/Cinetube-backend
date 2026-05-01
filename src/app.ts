@@ -68,12 +68,27 @@ app.set("views", path.resolve(process.cwd(), `src/app/templates`)); // Adjust pa
 
 
 // 1. GLOBALS (Must be at the very top)
-app.use(cors({
-    origin: [config.BETTER_AUTH_URL, config.FRONTEND_URL] as string[],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-}));
+// app.use(cors({
+//     origin: [config.BETTER_AUTH_URL, config.FRONTEND_URL] as string[],
+//     credentials: true,
+//     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+// }));
+
+const corsOptions = {
+  origin: [
+    config.BETTER_AUTH_URL,
+    config.FRONTEND_URL,
+    "http://localhost:3000",
+  ] as string[],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));  // ← handles preflight
+
 app.use(cookieParser()); // Required for Better-Auth
 
 // 2. AUTHENTICATION
