@@ -77,7 +77,7 @@ app.use(cors({
 app.use(cookieParser()); // Required for Better-Auth
 
 // 2. AUTHENTICATION
-app.use("/api/auth", toNodeHandler(auth));
+// app.use("/api/auth", toNodeHandler(auth));
 
 // ✅ To this (Order matters! Put this BEFORE IndexRoutes):
 // app.use("/api/v1/auth", toNodeHandler(auth));
@@ -97,7 +97,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1", IndexRoutes);
 
 //remove if not work
-// app.use("/api/v1/auth", toNodeHandler(auth));
+app.use("/api/v1/auth", toNodeHandler(auth));
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello from Apollo Gears World!");
